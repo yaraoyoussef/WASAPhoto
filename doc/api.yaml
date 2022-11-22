@@ -1,273 +1,361 @@
 openapi: 3.0.0
-servers:
-  - url: "http://localhost:3000"
-info:
-  title: Fantastic Coffee (decaffeinated)
-  description: Fantastic Coffee (decaffeinated), the skeleton project for Web and Software architecture course
+info: 
+  title: WASAPhoto
+  description: |
+    This API document describes the functioning of WASAPhoto website
   version: 1.0.0
 paths:
-  /status:
-    parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-    get:
-      tags: ["General"]
-      operationId: getStatusMessage
-      summary: Get status message for the user about issues / updates
+  /session:
+    post:
+      tags: ["login"]
+      summary: Logs in the user 
       description: |-
-        The response contains a status message meant for the user. It might
-        contains information about current technical issues, update messages
-        or general information.
+        If the user does not exist, it will be created,
+        and an identifier is returned.
+        If the user exists, the user identifier is returned.
+      operationId: doLogin 
+      requestBody:
+        description: User details 
+        content:
+          application/json: 
+            schema:
+              type: object 
+              properties:
+                name:
+                  type: string 
+                  example: Maria 
+                  pattern: 'ˆ.*?$'
+                  minLength: 3 
+                  maxLength: 16
+        required: true
+      responses:
+        '201':
+          description: User log-in action successful 
+          content:
+            application/json: 
+              schema:
+                type: object 
+                properties:
+                  identifier: 
+                    type: string
+                    example: "abcdef012345"
+  /users/:
+    get:
+      tags: ["Users"]
+      security:
+        - bearerAuth: []
+      operationId: getUserProfile
+      summary: shows the profile of a specific user
+      description: given a username, it displays its profile
+      parameters:
+        - $ref: "#/components/parameters/Username"
       responses:
         "200":
-          description: Status message available
+          description: user found and personal page is displayed
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/StatusInfo"
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-
-  /:
-    get:
-      tags: ["Group 1"]
-      operationId: index
-      summary: Get an index
-      description: |-
-        This is an example of an index API description
-      responses:
-        "200":
-          description: Successful
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-  /context:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "400": { description: user not found }
+  /users/{username}:
     parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-    post:
-      tags: ["Group 1"]
-      operationId: getContext
-      summary: Another API example
-      description: |-
-        Example description 2
-      responses:
-        "200":
-          description: Request ok
-          headers:
-            X-Access-Token:
-              description: Access token for authenticated requests
-              schema: { type: string }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-  /authenticated:
-    parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-    get:
-      tags: ["Group 2"]
-      operationId: getAuthenticatedExample
-      summary: Get an endpoint with authentication
-      description: |-
-        Get an endpoint with auth
-      security:
-        - LegacyAuth: []
-        - AppToken: []
-      responses:
-        "200":
-          description: Logout successful
-        "500": { $ref: "#/components/responses/InternalServerError" }
-
-  /pictures/{cat}:
-    parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-      - $ref: "#/components/parameters/cat"
-    get:
-      tags: ["Cat pictures"]
-      operationId: getCatFromPicture
-      summary: Example of a parameter in URL
-      description: |-
-        Example of a parameter in URL
-      security:
-        - LegacyAuth: []
-      responses:
-        "200":
-          description: Student picture found
-          content:
-            image/png:
-              schema:
-                type: string
-                format: binary
-              example: Picture binary file
-        "404":
-          description: Student picture not found
-        "500": { $ref: "#/components/responses/InternalServerError" }
-
-
-  /autofeeder/{cat}:
-    parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-      - $ref: "#/components/parameters/cat"
+      - $ref: "#components/parameters/Username" 
     put:
-      tags: ["Autofeeder"]
-      operationId: createCatAutofeeder
-      summary: Example of PUT operation
+      tags: ["Personal profile"]
       security:
-        - LegacyAuth: []
+        - bearerAuth: []
+      operationId: setMyUserName
+      summary: changes the username of the authenticated user 
+      description: this operation updates the username of authenticated user
+      requestBody:
+        description: user's details
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/User" }
       responses:
-        "200":
-          description: Auto feed enabled
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-    delete:
-      tags: ["Autofeeder"]
-      operationId: deleteCatAutofeeder
-      summary: Example of DELETE operation
+        "200": { description: Username updated successfully }
+        "400": { description: Username already in use }
+    get:
+      tags: ["Personal profile"]
       security:
-        - LegacyAuth: []
+        - bearerAuth: []
+      operationId: getMyStream
+      summary: returns stream of current user
+      description: shows the stream of the current user
       responses:
-        "200":
-          description: Auto feed disabled
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-
-  /session/login:
+        "200": 
+          description: stream returned successfully
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "400": { description: an error occured, please try again later }
+  /users/{username}/follow:
     parameters:
-      - $ref: "#/components/parameters/XAppBuild"
-      - $ref: "#/components/parameters/XAppVersion"
-      - $ref: "#/components/parameters/XAppLanguage"
-      - $ref: "#/components/parameters/XAppPlatform"
-    post:
-      tags: ["Session management"]
-      operationId: login
-      summary: Log-in into system
-      description: |-
-        Perform a log-in action using username and password credentials.
-        Returns a token which can be used in authenticated requests.
+      - $ref: "#/components/parameters/Username"
+    put:
+      tags: ["Follow"]
+      security:
+        - bearerAuth: []
+      operationId: followUser
+      summary: follows another user
+      description: allows the authorised user to follow another user
       requestBody:
         content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                userid:
-                  type: string
-                  pattern: '^[a-zA-Z0-9]+$'
-                  minLength: 3
-                  maxLength: 255
-                password:
-                  type: string
-                  pattern: '^.*?$'
-                  minLength: 8
-                  maxLength: 255
+          application/json:
+            schema:  { $ref: "#/components/schemas/User" }
       responses:
         "200":
-          description: Login successful
-          headers:
-            X-Access-Token:
-              description: Access token for authenticated requests
-              schema: { type: string }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "403":
-          description: Login failed
-          headers:
-            X-Message:
-              description: Error message
-              schema: { type: string }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-
-
+          description: user followed successfully
+          content:
+            application/json:
+              schema:  { $ref: "#/components/schemas/User" }
+        "400": { description: failed to follow this user }
+    delete:
+      tags: ["Follow"]
+      security:
+        - bearerAuth: []
+      operationId: unfollowUser
+      summary: unfollows another user
+      description: allows user to unfollow another user
+      responses:
+        "200": 
+          description: user unfollowed successfully
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+        "400": { description: failed to unfollow this user }
+  /users/{username}/ban:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+    put:
+      tags: ["Ban"]
+      security:
+        - bearerAuth: []
+      operationId: banUser
+      summary: bans user 
+      description: allows user to ban others
+      requestBody:  
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/User" }
+      responses:
+        "200": 
+          description: user banned successfully
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+        "400": { description: failed to ban user }
+    delete:
+      tags: ["Ban"]
+      security:
+        - bearerAuth: []
+      operationId: unbanUser
+      summary: unbans user
+      description: allows user to remove a ban put previously
+      responses:
+        "200": 
+          description: user unbanned successfully
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+        "400": { description: failed to unban user }
+  /photos/:
+    post:
+      tags: ["Photos"]
+      security:
+        - bearerAuth: []
+      operationId: uploadPhoto
+      summary: uploads a new photo in the user profile
+      description: |
+        method that enables user to add a new photo to his profile
+        generating a photo id for the photo
+      requestBody:
+        content:
+          image/png:
+            schema: { $ref: "#/components/schemas/Photo" }
+      responses:
+        "200":
+          description: photo uploaded successfully
+          content:
+            image/png: 
+              schema: { $ref: "#/components/schemas/Photo" }
+        "400": { description: an error occured, please try again later }
+  /photos/{photoId}:
+    parameters:
+      - $ref: "#/components/parameters/PhotoId"
+    delete:
+      tags: ["Photos"]
+      security:
+        - bearerAuth: []
+      operationId: deletePhoto
+      summary: lets user delete an uploaded photo
+      description: enables the user to delete an uploaded photo 
+      responses:
+        "200": { description: photo deleted successfully }
+        "400": { description: error, photo not found }
+  /photos/{photoId}/likes:
+    parameters:
+      - $ref: "#/components/parameters/PhotoId"
+    post:
+      tags: ["Likes"]
+      security:
+        - bearerAuth: []
+      operationId: likePhoto
+      summary: to like a photo
+      description: lets the user like a photo 
+      requestBody:
+        content:
+          image/png:
+            schema: { $ref: "#/components/schemas/Photo" }
+      responses:
+        "200": 
+          description: photo liked successfully
+          content:
+            image/png:
+              schema:  { $ref: "#/components/schemas/Photo" }
+        "400": { description: an errror occured, please try again later }
+    delete:
+      tags: ["Likes"]
+      security:
+        - bearerAuth: []
+      operationId: unlikePhoto
+      summary: unlikes a photo
+      description: allows the current user to remove a like from photo
+      responses:
+        "200": { description: like removed successfully }
+        "400": { description: an error occured, please retry later }
+  /photos/{photoId}/comments:
+    parameters:
+      - $ref: "#/components/parameters/PhotoId"
+    post:
+      tags: ["Comments"]
+      security:
+        - bearerAuth: []
+      operationId: commentPhoto
+      summary: to comment a photo
+      description: allows user to add a comment to a photo
+      requestBody:
+        content:
+          image/png: 
+            schema:  { $ref: "#/components/schemas/Photo" }
+          application/json:
+            schema: { $ref: "#/components/schemas/Comment" }
+      responses:
+        "200":
+          description: comment added successfully
+          content:
+            image/png:
+              schema:  { $ref: "#/components/schemas/Photo" }
+        "400": { description: an error occured, please retry later }
+  /photos/{photoId}/comments/{commentId}:
+    parameters:
+      - $ref: "#/components/parameters/PhotoId"
+      - $ref: "#/components/parameters/CommentId"
+    delete:
+      tags: ["Comments"]
+      security:
+        - bearerAuth: []
+      operationId: uncommentPhoto
+      summary: removes a comment
+      description: allows user to delete his comment from a photo
+      responses:
+        "200": { description: comment removed successfully }
+        "400": { description: an error occured, please retry later }
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
   schemas:
-    StatusInfo:
-      title: Status Info
+    User:
+      title: User
+      description: the object represents a single user
       type: object
       properties:
-        status:
+        username:
+          description: username
           type: string
-          enum:
-            - info
-            - warning
-            - critical
-            - ""
-        title: { type: string }
-        message: { type: string }
-        url: { type: string }
-
-  responses:
-    Unauthorized:
-      description: The access token is missing or it's expired
-    BadRequest:
-      description: The request was not compliant with the documentation (eg. missing fields, etc)
-    InternalServerError:
-      description: The server encountered an internal error. Further info in server logs
-
-  securitySchemes:
-    LegacyAuth:
-      type: apiKey
-      in: header
-      name: X-App-Token
-      description: |-
-        App session token value. This value is sent by the server in the login
-        and session refresh APIs.
-
+          example: maria77
+    Photo:
+      title: Photo
+      description: this object represents a single picture
+      type: object
+      properties:
+        picture:
+          description: the picture uploaded
+          type: string
+          format: binary
+        photoId:
+          description: id of a photo
+          type: number
+          example: 10097
+        likes:
+          description: represents the number of likes on a given photo
+          type: integer
+          example: 1
+        comments: 
+          description: represents the list of comments on a given photo
+          type: array 
+          items: 
+            $ref: "#/components/schemas/Comment"
+        dateAndTime:
+          description: represents the date and time in which the picture was uploaded
+          type: string
+          format: date-time 
+          example: 2017-07-21T17:32:28Z 
+    Profile:
+      title: Profile
+      description: the object represents the profile of a given user
+      type: object
+      properties:
+        username: { $ref: "#/components/parameters/Username" }
+        photos:
+          type: array
+          items: { $ref: "#/components/schemas/Photo" }
+        followers:
+          type: array
+          items: { $ref: "#/components/schemas/User"}
+        following:
+          type: array
+          items: { $ref: "#/components/schemas/User"}
+        posts:
+          type: integer
+          description: number of photos a user uploaded 
+          example: 1
+    Comment: 
+      title: Comment
+      description: this object represents a single comment
+      type: object
+      properties:
+        commentId: { $ref: "#/components/parameters/CommentId"}
+        username: { $ref: "#/components/parameters/Username" }
+        comment: 
+          type: string 
+          example: beautiful picture man! 
   parameters:
-    XAppVersion:
+    Username:
       schema:
         type: string
-        pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$'
-        minLength: 1
-        maxLength: 10
-      name: X-App-Version
-      in: header
-      required: true
-      description: App human readable version ("semantic version" format)
-      allowEmptyValue: false
-    XAppBuild:
-      schema: { type: integer }
-      name: X-App-Build
-      in: header
-      required: true
-      description: App build number
-      allowEmptyValue: false
-    XAppLanguage:
-      schema:
-        type: string
-        pattern: '^[a-z]{2}([-_][A-Z]{2})?$'
-        minLength: 2
-        maxLength: 5
-      name: X-App-Language
-      in: header
-      required: true
-      description: App language in ISO 639-1 format
-      allowEmptyValue: false
-    XAppPlatform:
-      schema:
-        type: string
-        enum: [ios, android]
-      name: X-App-Platform
-      in: header
-      required: true
-      description: App operating system / platform
-      allowEmptyValue: false
-    cat:
-      schema:
-        type: string
-        pattern: '^[a-zA-Z]+$'
-        minLength: 3
-        maxLength: 10
-      name: cat
+        example: maria77
+      name: username
       in: path
       required: true
-      description: Cat
-      allowEmptyValue: false
+      description: the unsername of the user
+    PhotoId:
+      schema:
+        type: number
+        example: 10097
+      name: photoId
+      in: path
+      required: true
+      description: id of a photo 
+    CommentId:  
+      schema:
+        type: number
+        example: 01
+      name: commentId
+      in: path
+      required: true
+      description: id of a comment
+
+
+    
