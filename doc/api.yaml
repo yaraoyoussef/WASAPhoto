@@ -55,7 +55,8 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Profile" }
-        "400": { description: user not found }
+        "404": { description: user not found }
+        "500": { description: an error occured, please try again later }
   /users/{username}:
     parameters:
       - $ref: "#components/parameters/Username" 
@@ -70,10 +71,11 @@ paths:
         description: user's details
         content:
           application/json:
-            schema: { $ref: "#/components/schemas/User" }
+            schema: { $ref: "#/components/schemas/Username" }
       responses:
-        "200": { description: Username updated successfully }
+        "204": { description: Username updated successfully }
         "400": { description: Username already in use }
+        "500": { description: an error occured, please try again later }
     get:
       tags: ["Personal profile"]
       security:
@@ -86,11 +88,13 @@ paths:
           description: stream returned successfully
           content:
             application/json:
-              schema: { $ref: "#/components/schemas/Profile" }
-        "400": { description: an error occured, please try again later }
-  /users/{username}/follow:
+              schema: { $ref: "#/components/schemas/Stream" }
+        "400": { description: error, please try again later }
+        "500": { description: could not load feed, please try again later }
+  /users/{username}/follow/{otherUsername}:
     parameters:
       - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/OtherUsername"
     put:
       tags: ["Follow"]
       security:
@@ -100,15 +104,17 @@ paths:
       description: allows the authorised user to follow another user
       requestBody:
         content:
-          application/json:
-            schema:  { $ref: "#/components/schemas/User" }
+          application/json: 
+            schema:  { $ref: "#/components/schemas/Username" } 
       responses:
         "200":
           description: user followed successfully
           content:
             application/json:
-              schema:  { $ref: "#/components/schemas/User" }
-        "400": { description: failed to follow this user }
+              schema:  { $ref: "#/components/schemas/Username" }
+        "404": { description: user not found }
+        "500": { description: failed to follow this user }
+
     delete:
       tags: ["Follow"]
       security:
@@ -117,15 +123,13 @@ paths:
       summary: unfollows another user
       description: allows user to unfollow another user
       responses:
-        "200": 
-          description: user unfollowed successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/User" }
-        "400": { description: failed to unfollow this user }
-  /users/{username}/ban:
+        "204": { description: user unfollowed successfully }
+        "404": { description: error, user not found }
+        "500": { description: failed to unfollow this user }
+  /users/{username}/ban/{otherUsername}:
     parameters:
       - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/OtherUsername"
     put:
       tags: ["Ban"]
       security:
@@ -136,14 +140,15 @@ paths:
       requestBody:  
         content:
           application/json:
-            schema: { $ref: "#/components/schemas/User" }
+            schema: { $ref: "#/components/schemas/Username" } 
       responses:
         "200": 
           description: user banned successfully
           content:
             application/json:
-              schema: { $ref: "#/components/schemas/User" }
-        "400": { description: failed to ban user }
+              schema: { $ref: "#/components/schemas/Username" } 
+        "404": { description: user not found }
+        "500": { description: failed to ban user }
     delete:
       tags: ["Ban"]
       security:
@@ -152,12 +157,9 @@ paths:
       summary: unbans user
       description: allows user to remove a ban put previously
       responses:
-        "200": 
-          description: user unbanned successfully
-          content:
-            application/json:
-              schema: { $ref: "#/components/schemas/User" }
-        "400": { description: failed to unban user }
+        "204": { description: user unbanned successfully }
+        "404": { description: error, user not found }
+        "500": { description: failed to unban user }
   /photos/:
     post:
       tags: ["Photos"]
@@ -171,14 +173,16 @@ paths:
       requestBody:
         content:
           image/png:
-            schema: { $ref: "#/components/schemas/Photo" }
+            schema:
+              $ref: "#/components/schemas/Photo"        
       responses:
         "200":
           description: photo uploaded successfully
           content:
             image/png: 
               schema: { $ref: "#/components/schemas/Photo" }
-        "400": { description: an error occured, please try again later }
+        "400": {description: failed to upload photo }
+        "500": { description: an error occured, please try again later }
   /photos/{photoId}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -190,12 +194,14 @@ paths:
       summary: lets user delete an uploaded photo
       description: enables the user to delete an uploaded photo 
       responses:
-        "200": { description: photo deleted successfully }
-        "400": { description: error, photo not found }
-  /photos/{photoId}/likes:
+        "204": { description: photo deleted successfully }
+        "404": { description: error, photo not found }
+        "500": { description: an error occured, please try again later }
+  /photos/{photoId}/likes/{username}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
-    post:
+      - $ref: "#/components/parameters/Username"
+    put:
       tags: ["Likes"]
       security:
         - bearerAuth: []
@@ -212,7 +218,8 @@ paths:
           content:
             image/png:
               schema:  { $ref: "#/components/schemas/Photo" }
-        "400": { description: an errror occured, please try again later }
+        "404": { description: error, photo not found }
+        "500": { description: an errror occured, please try again later }
     delete:
       tags: ["Likes"]
       security:
@@ -221,8 +228,9 @@ paths:
       summary: unlikes a photo
       description: allows the current user to remove a like from photo
       responses:
-        "200": { description: like removed successfully }
-        "400": { description: an error occured, please retry later }
+        "204": { description: like removed successfully }
+        "404": { description: error, photo not found }
+        "500": { description: an error occured, please retry later }
   /photos/{photoId}/comments:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -232,7 +240,9 @@ paths:
         - bearerAuth: []
       operationId: commentPhoto
       summary: to comment a photo
-      description: allows user to add a comment to a photo
+      description: |
+        allows user to add a comment to a photo generating a 
+        new comment id 
       requestBody:
         content:
           image/png: 
@@ -245,7 +255,8 @@ paths:
           content:
             image/png:
               schema:  { $ref: "#/components/schemas/Photo" }
-        "400": { description: an error occured, please retry later }
+        "404": { description: error, photo not found }
+        "500": { description: an error occured, please retry later }
   /photos/{photoId}/comments/{commentId}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -258,40 +269,62 @@ paths:
       summary: removes a comment
       description: allows user to delete his comment from a photo
       responses:
-        "200": { description: comment removed successfully }
-        "400": { description: an error occured, please retry later }
+        "204": { description: comment removed successfully }
+        "404": { description: error, photo not found }
+        "500": { description: an error occured, please retry later }
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
   schemas:
-    User:
-      title: User
-      description: the object represents a single user
+    Profile:
+      title: Profile
+      description: the object represents the profile of a single user
       type: object
       properties:
-        username:
-          description: username
-          type: string
-          example: maria77
+        username: { $ref: "#/components/schemas/Username" }
+        photos:
+          type: array
+          items: { $ref: "#/components/schemas/Photo" }
+        followers:
+          type: array
+          items: { $ref: "#/components/schemas/Username"}
+        following:
+          type: array
+          items: { $ref: "#/components/schemas/Username"}
+        posts:
+          type: integer
+          description: number of photos a user uploaded 
+          example: 1
+    Username: 
+      title: Username
+      description: username of user 
+      type: string 
+      pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+      example: maria77
     Photo:
       title: Photo
-      description: this object represents a single picture
+      description: | 
+        this object represents a picture with all its 
+        related information
       type: object
       properties:
-        picture:
-          description: the picture uploaded
-          type: string
-          format: binary
         photoId:
           description: id of a photo
           type: number
           example: 10097
+        photo:  
+          description: represents the single picture  
+          type: string 
+          format: binary 
+          pattern: "^[0-1]*$"
         likes:
-          description: represents the number of likes on a given photo
-          type: integer
-          example: 1
+          description: represents the lits of likes on a given photo
+          type: array
+          items:
+            $ref: "#/components/schemas/Username"
+          example: [maria77, bob77]
         comments: 
           description: represents the list of comments on a given photo
           type: array 
@@ -302,44 +335,46 @@ components:
           type: string
           format: date-time 
           example: 2017-07-21T17:32:28Z 
-    Profile:
-      title: Profile
-      description: the object represents the profile of a given user
-      type: object
-      properties:
-        username: { $ref: "#/components/parameters/Username" }
-        photos:
-          type: array
-          items: { $ref: "#/components/schemas/Photo" }
-        followers:
-          type: array
-          items: { $ref: "#/components/schemas/User"}
-        following:
-          type: array
-          items: { $ref: "#/components/schemas/User"}
-        posts:
-          type: integer
-          description: number of photos a user uploaded 
-          example: 1
     Comment: 
       title: Comment
       description: this object represents a single comment
       type: object
       properties:
-        commentId: { $ref: "#/components/parameters/CommentId"}
-        username: { $ref: "#/components/parameters/Username" }
+        commentId:
+          type: number
+          example: 01
+        username: { $ref: "#/components/schemas/Username" }
         comment: 
           type: string 
           example: beautiful picture man! 
+          pattern: "^(.*?)$"
+    Stream:
+      title: stream 
+      description: user's feed
+      type: object
+      properties:
+        data: 
+          type: array
+          items: { $ref: "#/components/schemas/Photo"}
   parameters:
     Username:
       schema:
         type: string
+        pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
         example: maria77
       name: username
       in: path
       required: true
-      description: the unsername of the user
+      description: username of the authorised user
+    OtherUsername:
+      schema:
+        type: string
+        example: bob77
+        pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+      name: otherUsername
+      in: path
+      required: true
+      description: username of a user
     PhotoId:
       schema:
         type: number
@@ -356,6 +391,4 @@ components:
       in: path
       required: true
       description: id of a comment
-
-
     
