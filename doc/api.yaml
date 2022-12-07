@@ -39,7 +39,9 @@ paths:
                   identifier: 
                     type: string
                     example: "abcdef012345"
-  /users/:
+  /users/{username}:
+    parameters:
+      - $ref: "#/components/parameters/Username"
     get:
       tags: ["Users"]
       security:
@@ -47,8 +49,6 @@ paths:
       operationId: getUserProfile
       summary: shows the profile of a specific user
       description: given a username, it displays its profile
-      parameters:
-        - $ref: "#/components/parameters/Username"
       responses:
         "200":
           description: user found and personal page is displayed
@@ -56,10 +56,9 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Profile" }
         "404": { description: user not found }
-        "500": { description: an error occured, please try again later }
-  /users/{username}:
-    parameters:
-      - $ref: "#components/parameters/Username" 
+        "500": 
+          description: |
+            an error occured, please try again later 
     put:
       tags: ["Personal profile"]
       security:
@@ -75,7 +74,10 @@ paths:
       responses:
         "204": { description: Username updated successfully }
         "400": { description: Username already in use }
-        "500": { description: an error occured, please try again later }
+        "500": 
+          description: |
+            an error occured, please try again later 
+  /home/:
     get:
       tags: ["Personal profile"]
       security:
@@ -89,8 +91,12 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Stream" }
-        "400": { description: error, please try again later }
-        "500": { description: could not load feed, please try again later }
+        "400": 
+          description: |
+            error, please try again later 
+        "500": 
+          description: | 
+            could not load feed, please try again later 
   /users/{username}/follow/{otherUsername}:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -124,7 +130,9 @@ paths:
       description: allows user to unfollow another user
       responses:
         "204": { description: user unfollowed successfully }
-        "404": { description: error, user not found }
+        "404": 
+          description: |
+            error, user not found 
         "500": { description: failed to unfollow this user }
   /users/{username}/ban/{otherUsername}:
     parameters:
@@ -158,7 +166,7 @@ paths:
       description: allows user to remove a ban put previously
       responses:
         "204": { description: user unbanned successfully }
-        "404": { description: error, user not found }
+        "404": { description: error; user not found }
         "500": { description: failed to unban user }
   /photos/:
     post:
@@ -182,7 +190,9 @@ paths:
             image/png: 
               schema: { $ref: "#/components/schemas/Photo" }
         "400": {description: failed to upload photo }
-        "500": { description: an error occured, please try again later }
+        "500": 
+          description: |
+            an error occured please try again later 
   /photos/{photoId}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -195,8 +205,10 @@ paths:
       description: enables the user to delete an uploaded photo 
       responses:
         "204": { description: photo deleted successfully }
-        "404": { description: error, photo not found }
-        "500": { description: an error occured, please try again later }
+        "404": { description: error; photo not found }
+        "500":  
+          description: |
+            an error occured, please try again later 
   /photos/{photoId}/likes/{username}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -218,8 +230,10 @@ paths:
           content:
             image/png:
               schema:  { $ref: "#/components/schemas/Photo" }
-        "404": { description: error, photo not found }
-        "500": { description: an errror occured, please try again later }
+        "404": { description: error; photo not found }
+        "500":  
+          description: |
+            an errror occured, please try again later 
     delete:
       tags: ["Likes"]
       security:
@@ -229,8 +243,10 @@ paths:
       description: allows the current user to remove a like from photo
       responses:
         "204": { description: like removed successfully }
-        "404": { description: error, photo not found }
-        "500": { description: an error occured, please retry later }
+        "404": { description: error; photo not found }
+        "500": 
+          description: |
+            an error occured, please retry later 
   /photos/{photoId}/comments:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -245,8 +261,7 @@ paths:
         new comment id 
       requestBody:
         content:
-          image/png: 
-            schema:  { $ref: "#/components/schemas/Photo" }
+        ##removed pic from req bod
           application/json:
             schema: { $ref: "#/components/schemas/Comment" }
       responses:
@@ -255,8 +270,10 @@ paths:
           content:
             image/png:
               schema:  { $ref: "#/components/schemas/Photo" }
-        "404": { description: error, photo not found }
-        "500": { description: an error occured, please retry later }
+        "404": { description: error; photo not found }
+        "500":  
+          description: |
+            an error occured, please retry later 
   /photos/{photoId}/comments/{commentId}:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
@@ -270,8 +287,10 @@ paths:
       description: allows user to delete his comment from a photo
       responses:
         "204": { description: comment removed successfully }
-        "404": { description: error, photo not found }
-        "500": { description: an error occured, please retry later }
+        "404": { description: error; photo not found }
+        "500": 
+          description: | 
+            an error occured, please retry later 
 components:
   securitySchemes:
     bearerAuth:
@@ -391,4 +410,3 @@ components:
       in: path
       required: true
       description: id of a comment
-    
