@@ -118,7 +118,7 @@ paths:
           application/json: 
             schema:  { $ref: "#/components/schemas/Username" } 
       responses:
-        "200":
+        "201":
           description: user followed successfully
           content:
             application/json:
@@ -156,7 +156,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/Username" } 
       responses:
-        "200": 
+        "201": 
           description: user banned successfully
           content:
             application/json:
@@ -192,7 +192,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Photo"        
       responses:
-        "200":
+        "201":
           description: photo uploaded successfully
           content:
             image/png: 
@@ -235,7 +235,7 @@ paths:
           image/png:
             schema: { $ref: "#/components/schemas/Photo" }
       responses:
-        "200": 
+        "201": 
           description: photo liked successfully
           content:
             image/png:
@@ -277,7 +277,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/Comment" }
       responses:
-        "200":
+        "201":
           description: comment added successfully
           content:
             image/png:
@@ -318,13 +318,22 @@ components:
         username: { $ref: "#/components/schemas/Username" }
         photos:
           type: array
+          description: represents the pictures uploaded by a given user 
           items: { $ref: "#/components/schemas/Photo" }
+          minItems: 0
+          maxItems: 5000000
         followers:
           type: array
+          description: represents the followers of a given user 
           items: { $ref: "#/components/schemas/Username"}
+          minItems: 0
+          maxItems: 100000000000
         following:
           type: array
+          description: represents the followings of a given user 
           items: { $ref: "#/components/schemas/Username"}
+          minItems: 0
+          maxItems: 100000000000
         posts:
           type: integer
           description: number of photos a user uploaded 
@@ -334,6 +343,8 @@ components:
       description: username of user 
       type: string 
       pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+      minLength: 5
+      maxLength: 15
       example: maria77
     Photo:
       title: Photo
@@ -351,21 +362,29 @@ components:
           type: string 
           format: binary 
           pattern: "^[0-1]*$"
+          minLength: 1
+          maxLength: 2147483647
         likes:
           description: represents the lits of likes on a given photo
           type: array
           items:
             $ref: "#/components/schemas/Username"
+          minItems: 0
+          maxItems: 100000000000
           example: [maria77, bob77]
         comments: 
           description: represents the list of comments on a given photo
           type: array 
           items: 
             $ref: "#/components/schemas/Comment"
+          minItems: 0
+          maxItems: 100000000000
         dateAndTime:
           description: represents the date and time in which the picture was uploaded
           type: string
           format: date-time 
+          minLength: 20
+          maxLength: 20
           example: 2017-07-21T17:32:28Z 
     Comment: 
       title: Comment
@@ -374,10 +393,14 @@ components:
       properties:
         commentId:
           type: number
+          description: represents the id of a comment 
           example: 01
         username: { $ref: "#/components/schemas/Username" }
         comment: 
           type: string 
+          description: the comment itself 
+          minLength: 1
+          maxLength: 500 
           example: beautiful picture man! 
           pattern: "^(.*?)$"
     Stream:
@@ -387,12 +410,17 @@ components:
       properties:
         data: 
           type: array
+          description: represents the photos shown in the current user's feed
           items: { $ref: "#/components/schemas/Photo"}
+          minItems: 0
+          maxItems: 100000000000
   parameters:
     Username:
       schema:
         type: string
         pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+        minLength: 5
+        maxLength: 15
         example: maria77
       name: username
       in: path
@@ -401,8 +429,10 @@ components:
     OtherUsername:
       schema:
         type: string
-        example: bob77
         pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+        minLength: 5
+        maxLength: 15
+        example: bob77
       name: otherUsername
       in: path
       required: true
@@ -437,6 +467,6 @@ tags:
   - name: Photos 
     description: for operations related to photos 
   - name: Likes 
-    description: for operations related to liking or unliking a photo 
+    description: for operations related to liking or unliking a photo
   - name: Comments 
-    description: for operations related to commenting or uncommenting a photo 
+    description: for operations related to commenting or uncommenting a photo
