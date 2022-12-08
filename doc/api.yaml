@@ -7,7 +7,8 @@ info:
 paths:
   /session:
     post:
-      tags: ["login"]
+      tags: 
+        - Login 
       summary: Logs in the user 
       description: |-
         If the user does not exist, it will be created,
@@ -43,7 +44,8 @@ paths:
     parameters:
       - $ref: "#/components/parameters/Username"
     get:
-      tags: ["Users"]
+      tags:
+        - Users 
       security:
         - bearerAuth: []
       operationId: getUserProfile
@@ -60,7 +62,8 @@ paths:
           description: |
             an error occured, please try again later 
     put:
-      tags: ["Personal profile"]
+      tags: 
+        - Personal Profile 
       security:
         - bearerAuth: []
       operationId: setMyUserName
@@ -79,7 +82,8 @@ paths:
             an error occured, please try again later 
   /home/:
     get:
-      tags: ["Personal profile"]
+      tags: 
+        - Personal Profile 
       security:
         - bearerAuth: []
       operationId: getMyStream
@@ -102,7 +106,8 @@ paths:
       - $ref: "#/components/parameters/Username"
       - $ref: "#/components/parameters/OtherUsername"
     put:
-      tags: ["Follow"]
+      tags:
+        - Follow
       security:
         - bearerAuth: []
       operationId: followUser
@@ -120,9 +125,9 @@ paths:
               schema:  { $ref: "#/components/schemas/Username" }
         "404": { description: user not found }
         "500": { description: failed to follow this user }
-
     delete:
-      tags: ["Follow"]
+      tags: 
+        - Follow
       security:
         - bearerAuth: []
       operationId: unfollowUser
@@ -139,7 +144,8 @@ paths:
       - $ref: "#/components/parameters/Username"
       - $ref: "#/components/parameters/OtherUsername"
     put:
-      tags: ["Ban"]
+      tags:
+        - Ban 
       security:
         - bearerAuth: []
       operationId: banUser
@@ -158,7 +164,8 @@ paths:
         "404": { description: user not found }
         "500": { description: failed to ban user }
     delete:
-      tags: ["Ban"]
+      tags: 
+        - Ban
       security:
         - bearerAuth: []
       operationId: unbanUser
@@ -170,7 +177,8 @@ paths:
         "500": { description: failed to unban user }
   /photos/:
     post:
-      tags: ["Photos"]
+      tags: 
+        - Photos
       security:
         - bearerAuth: []
       operationId: uploadPhoto
@@ -197,7 +205,8 @@ paths:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
     delete:
-      tags: ["Photos"]
+      tags: 
+        - Photos
       security:
         - bearerAuth: []
       operationId: deletePhoto
@@ -214,7 +223,8 @@ paths:
       - $ref: "#/components/parameters/PhotoId"
       - $ref: "#/components/parameters/Username"
     put:
-      tags: ["Likes"]
+      tags: 
+        - Likes
       security:
         - bearerAuth: []
       operationId: likePhoto
@@ -235,7 +245,8 @@ paths:
           description: |
             an errror occured, please try again later 
     delete:
-      tags: ["Likes"]
+      tags: 
+        - Likes
       security:
         - bearerAuth: []
       operationId: unlikePhoto
@@ -251,7 +262,8 @@ paths:
     parameters:
       - $ref: "#/components/parameters/PhotoId"
     post:
-      tags: ["Comments"]
+      tags: 
+        - Comments
       security:
         - bearerAuth: []
       operationId: commentPhoto
@@ -279,7 +291,8 @@ paths:
       - $ref: "#/components/parameters/PhotoId"
       - $ref: "#/components/parameters/CommentId"
     delete:
-      tags: ["Comments"]
+      tags: 
+        - Comments
       security:
         - bearerAuth: []
       operationId: uncommentPhoto
@@ -410,3 +423,20 @@ components:
       in: path
       required: true
       description: id of a comment
+tags:
+  - name: Login 
+    description: relating to login action to the platform
+  - name: Users 
+    description: for operations related to the users 
+  - name: Personal Profile 
+    description: for operations related to the current user 
+  - name: follow  
+    description: for operations related to following or unfollowing another user 
+  - name: Ban 
+    description: for operations related to banning or unbanning another user  
+  - name: Photos 
+    description: for operations related to photos 
+  - name: Likes 
+    description: for operations related to liking or unliking a photo 
+  - name: Comments 
+    description: for operations related to commenting or uncommenting a photo 
