@@ -21,11 +21,13 @@ paths:
           application/json: 
             schema:
               type: object 
+              description: contains the username
               properties:
                 name:
                   type: string 
-                  example: Maria 
-                  pattern: 'ˆ.*?$'
+                  description: the username of the user trying to log-in 
+                  example: maria77 
+                  pattern: '^([a-z0-9._-])\w+$'
                   minLength: 3 
                   maxLength: 16
         required: true
@@ -36,9 +38,11 @@ paths:
             application/json: 
               schema:
                 type: object 
+                description: contains the unique id generated for the user 
                 properties:
                   identifier: 
                     type: string
+                    description: the unique id generated for the user 
                     example: "abcdef012345"
   /users/{username}:
     parameters:
@@ -342,7 +346,7 @@ components:
       title: Username
       description: username of user 
       type: string 
-      pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+      pattern: 'ˆ^([a-z0-9._-])\w+$'
       minLength: 5
       maxLength: 15
       example: maria77
@@ -418,7 +422,7 @@ components:
     Username:
       schema:
         type: string
-        pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+        pattern: '^([a-z0-9._-])\w+$'
         minLength: 5
         maxLength: 15
         example: maria77
@@ -429,7 +433,7 @@ components:
     OtherUsername:
       schema:
         type: string
-        pattern: "^(?=[a-z0-9._-]{5,15}$)[^.]$"
+        pattern: '^([a-z0-9._-])\w+$'
         minLength: 5
         maxLength: 15
         example: bob77
@@ -460,7 +464,7 @@ tags:
     description: for operations related to the users 
   - name: Personal Profile 
     description: for operations related to the current user 
-  - name: follow  
+  - name: Follow  
     description: for operations related to following or unfollowing another user 
   - name: Ban 
     description: for operations related to banning or unbanning another user  
