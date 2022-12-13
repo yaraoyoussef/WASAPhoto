@@ -346,7 +346,7 @@ components:
       title: Username
       description: username of user 
       type: string 
-      pattern: 'ˆ^([a-z0-9._-])\w+$'
+      pattern: '^([a-z0-9._-])\w+$'
       minLength: 5
       maxLength: 15
       example: maria77
