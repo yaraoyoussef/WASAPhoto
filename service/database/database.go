@@ -34,14 +34,58 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
+
+var ErrCouldNotModify = errors.New("could not modify username")
+var ErrUserDoesNotExist = errors.New("could not find user")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
+	Login(User) (User, error)
+	GetProfile(string) (Profile, error)
+	SetUsername(User) error
+	FollowUser(string, string) error
+	UnfollowUser(string, string) error
 	GetName() (string, error)
-	SetName(name string) error
-
+	SetName(string) error
+	BanUser(string, string) error
+	UnbanUser(string, string) error
+	UploadPhoto(Photo) (Photo, error)
+	CheckForBan(string, string) (bool, error)
 	Ping() error
+}
+
+// structure that represents a user
+type User struct {
+	ID       string
+	Username string
+	// each user has to a profile
+	//Pr Profile
+}
+
+// structure that represents a user profile
+type Profile struct {
+	Username string `json:"username"`
+	// photos are not strings and followers/following should be usernames not users
+	Photos    []Photo  `json:"photos"`
+	Followers []string `json:"followers"`
+	Following []string `json:"following"`
+	Posts     int      `json:"posts"`
+}
+
+type Photo struct {
+	ID          int       `json:"photoId"`
+	Owner       string    `json:"owner"`
+	Likes       []User    `json:"likes"`
+	Comments    []Comment `json:"comments"`
+	DateAndTime time.Time `json:"dateAndTime"`
+}
+
+type Comment struct {
+	CommentId int64  `json:"commentId"`
+	Comment   string `json:"comment"`
+	Username  string `json:"username"`
 }
 
 type appdbimpl struct {
@@ -70,6 +114,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 		c: db,
 	}, nil
 }
+
+// create function to authenticate current user
 
 func (db *appdbimpl) Ping() error {
 	return db.c.Ping()
