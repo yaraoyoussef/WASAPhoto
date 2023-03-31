@@ -5,6 +5,8 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
@@ -26,19 +28,43 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// send user info to db
-	dbUser, err := rt.db.Login(user.ToDatabase())
+	err = rt.db.Login(user.ToDatabase())
 	if err != nil {
-		// handle error on our side. Log it and send 500 to user
-		// 500 code error should be in api operation responses??
-		ctx.Logger.WithError(err).Error("cannot login user")
-		w.WriteHeader(http.StatusInternalServerError)
+		// user already exists in db
+		w.WriteHeader(http.StatusOK)
+		err = json.NewEncoder(w).Encode(user)
+		if err != nil {
+			// handle error on our side. Log it and send 500 to user
+			// 500 code error should be in api operation responses??
+			ctx.Logger.WithError(err).Error("cannot login user")
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		return
 	}
 
-	// over-writing user from info in db
-	user.FromDatabase(dbUser)
+	// create user's directories
+	err = createUserDir(user.Username, ctx)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("couldn't create user's folder")
+		return
+	}
 
 	// send output to user
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(user)
+}
+
+// function that creates new sub-dir for user
+func createUserDir(username string, ctx reqcontext.RequestContext) error {
+	// create path for each user
+	path := filepath.Join("userFolder", username)
+	// create sub-path in path for pictures of each user
+	err := os.MkdirAll(filepath.Join(path, "photos"), os.ModePerm)
+	// handle errors
+	if err != nil {
+		ctx.Logger.WithError(err).Error("user's directory couldn't be created")
+		return err
+	}
+	return nil
 }

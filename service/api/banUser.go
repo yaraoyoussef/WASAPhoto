@@ -16,6 +16,15 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	currentUser := ps.ByName("username")
 	userToBan := ps.ByName("otherUsername")
 
+	// extract from header
+	userReq := extractBearer(r.Header.Get("Authorization"))
+	// validation
+	valid := validateUser(currentUser, userReq)
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
 	// check if user is trying to ban himself
 	if currentUser == userToBan {
 		w.WriteHeader(http.StatusBadRequest)

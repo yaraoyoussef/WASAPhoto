@@ -52,11 +52,6 @@ func (p *User) ToDatabase() database.User {
 	}
 }
 
-func (p *User) FromDatabase(user database.User) {
-	p.ID = user.ID
-	p.Username = user.Username
-}
-
 func (p *Profile) ToDatabase() database.Profile {
 	return database.Profile{
 		Username:  p.Username,

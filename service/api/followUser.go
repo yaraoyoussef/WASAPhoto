@@ -17,6 +17,15 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	currentUser := ps.ByName("username")
 	userToFollow := ps.ByName("otherUsername")
 
+	// extract from header
+	userReq := extractBearer(r.Header.Get("Authorization"))
+	// validation
+	valid := validateUser(currentUser, userReq)
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
 	// user cannot follow himself
 	if currentUser == userToFollow {
 		w.WriteHeader(http.StatusBadRequest)

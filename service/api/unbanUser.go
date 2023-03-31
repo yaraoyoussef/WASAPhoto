@@ -17,6 +17,15 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 	username := r.URL.Query().Get("username")
 	otherUsername := r.URL.Query().Get("otherUsername")
 
+	// extract from header
+	userReq := extractBearer(r.Header.Get("Authorization"))
+	// validation
+	valid := validateUser(username, userReq)
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
 	// do operation on database
 	err := rt.db.UnbanUser(username, otherUsername)
 

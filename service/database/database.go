@@ -42,7 +42,7 @@ var ErrUserDoesNotExist = errors.New("could not find user")
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	Login(User) (User, error)
+	Login(User) error
 	GetProfile(string) (Profile, error)
 	SetUsername(User) error
 	FollowUser(string, string) error

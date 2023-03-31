@@ -14,6 +14,15 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 	username := ps.ByName("username")
 	otherUsername := ps.ByName("otherUsername")
 
+	// extract from header
+	userReq := extractBearer(r.Header.Get("Authorization"))
+	// validation
+	valid := validateUser(username, userReq)
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
 	// do operation on database
 	err := rt.db.UnfollowUser(username, otherUsername)
 
