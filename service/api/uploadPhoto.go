@@ -21,7 +21,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// store picture in db
-	dbPost, err := rt.db.UploadPhoto(photo.ToDatabase())
+	dbPost, err := rt.db.UploadPhoto(post.ToDatabase())
 	if err != nil {
 		ctx.Logger.WithError(err).Error("Cannot upload post, please retry later")
 		w.WriteHeader(http.StatusInternalServerError)

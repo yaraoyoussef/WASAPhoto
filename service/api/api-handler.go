@@ -15,7 +15,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:username/follow/:otherUsername", rt.wrap(rt.unfollowUser))
 	rt.router.PUT("/users/:username/ban/:otherUsername", rt.wrap(rt.banUser))
 	rt.router.DELETE("/users/:username/ban/:otherUsername", rt.wrap(rt.unbanUser))
-	rt.router.POST("/photos/", rt.wrap(rt.uploadPhoto))
+	rt.router.POST("/users/:username/photos/", rt.wrap(rt.uploadPhoto))
 	rt.router.GET("/context", rt.wrap(rt.getContextReply))
 
 	// Special routes

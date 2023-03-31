@@ -1,7 +1,6 @@
 package api
 
 import (
-	"regexp"
 	"time"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -76,11 +75,12 @@ func (p *Profile) FromDatabase(profile database.Profile) {
 	p.Posts = profile.Posts
 }
 
-// function to validate username's format
-func (p *User) IsValid(username string) bool {
-	re := regexp.MustCompile(`^([a-z0-9._-])\w+$`)
-	// TODO take username from user
-	return re.MatchString(username)
+func (p *Photo) ToDatabase() database.Photo {
+	return database.Photo{
+		ID:          p.ID,
+		Owner:       p.Owner,
+		Likes:       p.Likes,
+		Comments:    p.Comments,
+		DateAndTime: p.DateAndTime,
+	}
 }
-
-// func to authenticate user
