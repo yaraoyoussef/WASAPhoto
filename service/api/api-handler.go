@@ -10,7 +10,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.POST("/session", rt.wrap(rt.doLogin))
 	rt.router.GET("/users/:username", rt.wrap(rt.getUserProfile))
 	rt.router.PUT("/users/:username", rt.wrap(rt.setMyUsername))
-	rt.router.GET("/home/", rt.wrap(rt.getMyStream))
+	rt.router.GET("/users/:username/home/", rt.wrap(rt.getMyStream))
 	rt.router.PUT("/users/:username/follow/:otherUsername", rt.wrap(rt.followUser))
 	rt.router.DELETE("/users/:username/follow/:otherUsername", rt.wrap(rt.unfollowUser))
 	rt.router.PUT("/users/:username/ban/:otherUsername", rt.wrap(rt.banUser))

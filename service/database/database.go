@@ -51,7 +51,7 @@ type AppDatabase interface {
 	SetName(string) error
 	BanUser(string, string) error
 	UnbanUser(string, string) error
-	UploadPhoto(Photo) (Photo, error)
+	UploadPhoto(Photo) (int64, error)
 	CheckForBan(string, string) (bool, error)
 	Ping() error
 }

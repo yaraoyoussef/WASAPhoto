@@ -84,7 +84,7 @@ paths:
         "500": 
           description: |
             an error occured, please try again later 
-  /home/:
+  /users/{username}/home/:
     get:
       tags: 
         - Personal Profile 
@@ -188,7 +188,7 @@ paths:
         content:
           image/png:
             schema:
-              $ref: "#/components/schemas/Photo"
+              $ref: "#/components/schemas/RawPhoto"
         required: true
       responses:
         "201":
@@ -353,6 +353,18 @@ components:
           minLength: 5
           maxLength: 15
           example: maria77
+    RawPhoto:
+      description: contains the raw image the user wants to upload
+      type: object
+      properties:
+        data: 
+          description: data of the image
+          type: string
+          format: binary
+          pattern: "^[0-1]*$"
+          minLength: 1
+          maxLength: 2147483647
+          example: "0110010101"
     Photo:
       title: Photo
       description: | 
@@ -367,13 +379,6 @@ components:
         owner:
           description: username of user that uploaded the photo
           $ref: "#/components/schemas/Username"
-        photo:  
-          description: represents the single picture  
-          type: string 
-          format: binary 
-          pattern: "^[0-1]*$"
-          minLength: 1
-          maxLength: 2147483647
         likes:
           description: represents the lits of likes on a given photo
           type: array

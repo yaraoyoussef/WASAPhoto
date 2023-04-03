@@ -7,13 +7,12 @@ import (
 )
 
 type User struct {
-	// not sure if i need id
 	ID       string `json:"ID"`
 	Username string `json:"username"`
 }
 
 type Username struct {
-	username string `json:"username"`
+	Username string `json:"username"`
 }
 
 type Profile struct {

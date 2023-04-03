@@ -15,20 +15,37 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	// store values of error and db profile
 	var err error
 	var profile database.Profile
+
+	// get username of current user
+	cUser := extractBearer(r.Header.Get("Authorization"))
 	// get username requested by user
-	username := r.URL.Query().Get("username")
+	username := ps.ByName("username")
+
 	// check if username is empty
 	if username == "" {
 		w.WriteHeader(http.StatusNotFound)
 		return
-	} else {
-		// get profile from db
-		profile, err = rt.db.GetProfile(username)
 	}
 
+	// check if cUser is banned by other user
+	banned, err := rt.db.CheckForBan(username, cUser)
+	// handle error
 	if err != nil {
-		// we have an internal server error
-		ctx.Logger.WithError(err).Error("error, please try again later")
+		ctx.Logger.WithError(err).Error("an error occured")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	// if cUser is banned, do not allow retrieval
+	if banned {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// get profile from db
+	profile, err1 := rt.db.GetProfile(username)
+	// error handling
+	if err1 != nil {
+		ctx.Logger.WithError(err).Error("error while executing request")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -38,6 +55,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	frontendProfile.FromDatabase(profile)
 
 	// send profile to user
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(frontendProfile)
 

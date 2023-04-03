@@ -1,6 +1,6 @@
 package api
 
-// DONE -- to validate user auth
+// DONE
 
 import (
 	"errors"

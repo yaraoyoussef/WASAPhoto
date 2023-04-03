@@ -1,20 +1,12 @@
 package database
 
-import (
-	"strconv"
-)
-
 func (db *appdbimpl) Login(p User) error {
-	res, err := db.c.Exec(`INSERT INTO users (id, username) VALUES (NULL, ?)`, p.Username)
-	if err != nil {
-		return err
-	}
-	// last insert id? non credo perche lo giestiamo usando username... but what about identifier generated
-	id, err := res.LastInsertId()
+	// insert into db using query
+	_, err := db.c.Exec(`INSERT INTO users (id, username) VALUES (?, ?)`, p.Username, p.Username)
+
 	if err != nil {
 		return err
 	}
 
-	p.ID = strconv.Itoa(int(id))
 	return nil
 }
