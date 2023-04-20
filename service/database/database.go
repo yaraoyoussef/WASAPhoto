@@ -53,6 +53,12 @@ type AppDatabase interface {
 	UnbanUser(string, string) error
 	UploadPhoto(Photo) (int64, error)
 	CheckForBan(string, string) (bool, error)
+	DeletePhoto(string, int64) error
+	LikePhoto(int64, string) error
+	UnlikePhoto(int64, string) error
+	CommentPhoto(int64, string, Comment) (int64, error)
+	UncommentPhotoOwner(int64, int64) error
+	UncommentPhoto(string, int64, int64) error
 	Ping() error
 }
 
@@ -98,6 +104,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 	if db == nil {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
+
+	// create tables here
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
 	var tableName string

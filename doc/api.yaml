@@ -85,6 +85,8 @@ paths:
           description: |
             an error occured, please try again later 
   /users/{username}/home/:
+    parameters:
+      - $ref: "#/components/parameters/Username"
     get:
       tags: 
         - Personal Profile 
@@ -261,7 +263,7 @@ paths:
             an error occured, please retry later 
   /users/{username}/photos/{photoId}/comments:
     parameters:
-      - $ref: "#c/components/parameters/Username"
+      - $ref: "#/components/parameters/Username"
       - $ref: "#/components/parameters/PhotoId"
     post:
       tags: 
@@ -275,7 +277,6 @@ paths:
         new comment id 
       requestBody:
         content:
-        ##removed pic from req bod
           application/json:
             schema: { $ref: "#/components/schemas/Comment" }
       responses:

@@ -78,3 +78,11 @@ func (p *Photo) ToDatabase() database.Photo {
 		DateAndTime: p.DateAndTime,
 	}
 }
+
+func (c *Comment) ToDatabase() database.Comment {
+	return database.Comment{
+		CommentId: c.CommentId,
+		Comment:   c.Comment,
+		Username:  c.Username,
+	}
+}

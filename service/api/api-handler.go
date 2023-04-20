@@ -16,6 +16,11 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:username/ban/:otherUsername", rt.wrap(rt.banUser))
 	rt.router.DELETE("/users/:username/ban/:otherUsername", rt.wrap(rt.unbanUser))
 	rt.router.POST("/users/:username/photos/", rt.wrap(rt.uploadPhoto))
+	rt.router.DELETE("/users/:username/photos/:photoId", rt.wrap(rt.deletePhoto))
+	rt.router.PUT("/users/:username/photos/:photoId/likes/:otherUsername", rt.wrap(rt.likePhoto))
+	rt.router.DELETE("/users/:username/photos/:photoId/likes/:otherUsername", rt.wrap(rt.unlikePhoto))
+	rt.router.POST("/users/:username/photos/:photoId/comments", rt.wrap(rt.commentPhoto))
+	rt.router.DELETE("/users/:username/photos/:photoId/comments/:commentId", rt.wrap(rt.uncommentPhoto))
 	rt.router.GET("/context", rt.wrap(rt.getContextReply))
 
 	// Special routes

@@ -1,0 +1,58 @@
+package api
+
+import (
+	"net/http"
+	"strconv"
+
+	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
+	"github.com/julienschmidt/httprouter"
+)
+
+// function to like post of another user
+func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+	username := ps.ByName("username")
+	userLiked := ps.ByName("otherUsername")
+
+	// user cannot like his own picture
+	if userLiked == username {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// validation (userLiked) bcz to be able to put a like, user has to be logged in
+	valid := validateUser(userLiked, extractBearer(r.Header.Get("Authorization")))
+	if valid != 0 {
+		w.WriteHeader(valid)
+		return
+	}
+
+	// check if user who wants to like was banned by the user owner of the post
+	banned, err := rt.db.CheckForBan(username, userLiked)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("an error occured in database")
+		return
+	}
+	if banned {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	// convert photoId to int64
+	photoId, err := strconv.ParseInt(ps.ByName("photoId"), 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("an error occured during conversion")
+		return
+	}
+
+	// put like (by inserting it into database)
+	err = rt.db.LikePhoto(photoId, userLiked)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+
+}
