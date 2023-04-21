@@ -119,16 +119,8 @@ paths:
       operationId: followUser
       summary: follows another user
       description: allows the authorised user to follow another user
-      requestBody:
-        content:
-          application/json: 
-            schema:  { $ref: "#/components/schemas/Username" } 
       responses:
-        "201":
-          description: user followed successfully
-          content:
-            application/json:
-              schema:  { $ref: "#/components/schemas/Username" }
+        "201": { description: user followed successfully }
         "404": { description: user not found }
         "500": { description: failed to follow this user }
     delete:
@@ -233,16 +225,9 @@ paths:
       operationId: likePhoto
       summary: to like a photo
       description: lets the user like a photo 
-      requestBody:
-        content:
-          image/png:
-            schema: { $ref: "#/components/schemas/Photo" }
       responses:
         "201": 
           description: photo liked successfully
-          content:
-            image/png:
-              schema:  { $ref: "#/components/schemas/Photo" }
         "404": { description: error; photo not found }
         "500":  
           description: |
@@ -284,7 +269,7 @@ paths:
           description: comment added successfully
           content:
             image/png:
-              schema:  { $ref: "#/components/schemas/Photo" }
+              schema:  { $ref: "#/components/schemas/Comment" }
         "404": { description: error; photo not found }
         "500":  
           description: |

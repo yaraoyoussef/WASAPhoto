@@ -70,5 +70,6 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
+	// response
 	w.WriteHeader(http.StatusNoContent)
 }

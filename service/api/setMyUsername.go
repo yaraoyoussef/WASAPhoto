@@ -58,5 +58,7 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	// response
 	w.WriteHeader(http.StatusNoContent)
 }

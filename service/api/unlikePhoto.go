@@ -47,5 +47,6 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	// response
 	w.WriteHeader(http.StatusNoContent)
 }

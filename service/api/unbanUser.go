@@ -37,4 +37,7 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	// response
+	w.WriteHeader(http.StatusNoContent)
 }

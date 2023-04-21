@@ -42,7 +42,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	// get profile from db
-	profile, err1 := rt.db.GetProfile(username)
+	profile, err1 := rt.db.GetProfile(username, cUser)
 	// error handling
 	if err1 != nil {
 		ctx.Logger.WithError(err).Error("error while executing request")

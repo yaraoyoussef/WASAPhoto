@@ -16,8 +16,7 @@ type Username struct {
 }
 
 type Profile struct {
-	Username string `json:"username"`
-	//  followers/following should be database.user
+	Username  string           `json:"username"`
 	Photos    []database.Photo `json:"photos"`
 	Followers []string         `json:"followers"`
 	Following []string         `json:"following"`
@@ -31,11 +30,9 @@ type Stream struct {
 type Photo struct {
 	ID          int                `json:"photoId"`
 	Owner       string             `json:"owner"`
-	Likes       []database.User    `json:"likes"`
+	Likes       []string           `json:"likes"`
 	Comments    []database.Comment `json:"comments"`
 	DateAndTime time.Time          `json:"dateAndTime"`
-	// in api doc i have the picture in here too, but idk how to put it here
-	// maybe will modify api
 }
 
 type Comment struct {

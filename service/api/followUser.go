@@ -3,7 +3,6 @@ package api
 // DONE
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -56,7 +55,6 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	// return to the user
-	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(userToFollow)
+	// response
+	w.WriteHeader(http.StatusNoContent)
 }

@@ -68,10 +68,13 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	}
 
 	// return to user
-	// should i remove response body??????
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(commentId)
+	err = json.NewEncoder(w).Encode(Comment{
+		CommentId: commentId,
+		Username:  commenter,
+		Comment:   comment.Comment,
+	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
