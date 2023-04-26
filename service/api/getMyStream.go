@@ -20,12 +20,14 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	// get the list of users that current user follows
 	followings, err := rt.db.GetFollowing(userReq)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	// get photos of each of the followings
 	var photos []database.Photo
 	for _, following := range followings {
 		followingPhotos, err := rt.db.GetPhotos(userReq, following)
@@ -33,13 +35,16 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		// limit number of photos per following user in home page of current user
 		for i, photo := range followingPhotos {
-			if i >= 5 {
+			if i >= database.PPU {
 				break
 			}
 			photos = append(photos, photo)
 		}
 	}
+
+	// return to user
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(photos)

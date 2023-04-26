@@ -37,8 +37,12 @@ import (
 	"time"
 )
 
+// errors
 var ErrCouldNotModify = errors.New("could not modify username")
 var ErrUserDoesNotExist = errors.New("could not find user")
+
+// constante representing number of photos of each user in a home page of another user
+const PPU = 2
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
