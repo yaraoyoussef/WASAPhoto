@@ -144,7 +144,7 @@ func createDB(db *sql.DB) error {
 		`CREATE TABLE IF NOT EXISTS banned(
 			user VARCHAR(16) NOT NULL,
 			ubanned VARCHAR(16) NOT NULL,
-			PRIMARY KEY(user, uBanned)
+			PRIMARY KEY(user, uBanned),
 			FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE,
 			FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS photos(
