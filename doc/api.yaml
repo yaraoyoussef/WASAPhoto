@@ -62,6 +62,7 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Profile" }
         "404": { description: user not found }
+        "401": { description: operation unauthorized }
         "500": 
           description: |
             an error occured, please try again later 
@@ -80,10 +81,9 @@ paths:
             schema: { $ref: "#/components/schemas/Username" }
       responses:
         "204": { description: Username updated successfully }
-        "400": { description: Username already in use }
-        "500": 
-          description: |
-            an error occured, please try again later 
+        "403": { description: Username already in use }
+        "401": {description: operation unauthorized }
+        "500": { description: an error occured please try again later }
   /users/{username}/home/:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -101,9 +101,8 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Stream" }
-        "400": 
-          description: |
-            error, please try again later 
+        "404": { description: page not found }
+        "401": {description: operation unauthorized }
         "500": 
           description: | 
             could not load feed, please try again later 
@@ -120,8 +119,9 @@ paths:
       summary: follows another user
       description: allows the authorised user to follow another user
       responses:
-        "201": { description: user followed successfully }
+        "204": { description: user followed successfully }
         "404": { description: user not found }
+        "401": {description: operation unauthorized }
         "500": { description: failed to follow this user }
     delete:
       tags: 
@@ -133,9 +133,8 @@ paths:
       description: allows user to unfollow another user
       responses:
         "204": { description: user unfollowed successfully }
-        "404": 
-          description: |
-            error, user not found 
+        "404": { description: user not found }
+        "401": {description: operation unauthorized }
         "500": { description: failed to unfollow this user }
   /users/{username}/banned/{otherUsername}:
     parameters:
@@ -150,8 +149,9 @@ paths:
       summary: bans user 
       description: allows user to ban others
       responses:
-        "201": { description: user banned successfully }
+        "204": { description: user banned successfully }
         "404": { description: user not found }
+        "401": {description: operation unauthorized }
         "500": { description: failed to ban user }
     delete:
       tags: 
@@ -164,6 +164,7 @@ paths:
       responses:
         "204": { description: user unbanned successfully }
         "404": { description: error; user not found }
+        "401": {description: operation unauthorized }
         "500": { description: failed to unban user }
   /users/{username}/photos/:
     parameters:
@@ -190,10 +191,9 @@ paths:
           content:
             image/png: 
               schema: { $ref: "#/components/schemas/Photo" }
-        "400": {description: failed to upload photo }
-        "500": 
-          description: |
-            an error occured please try again later 
+        "404": {description: photo not found }
+        "401": {description: operation unauthorized }
+        "500": { description: an error occured please try again later }
   /users/{username}/photos/{photoId}:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -209,9 +209,8 @@ paths:
       responses:
         "204": { description: photo deleted successfully }
         "404": { description: error; photo not found }
-        "500":  
-          description: |
-            an error occured, please try again later 
+        "401": {description: operation unauthorized }
+        "500": { description: an error occured please try again later } 
   /users/{username}/photos/{photoId}/likes/{otherUsername}:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -226,9 +225,10 @@ paths:
       summary: to like a photo
       description: lets the user like a photo 
       responses:
-        "201": 
+        "204": 
           description: photo liked successfully
-        "404": { description: error; photo not found }
+        "404": { description: photo not found }
+        "401": {description: operation unauthorized }
         "500":  
           description: |
             an errror occured, please try again later 
@@ -243,6 +243,7 @@ paths:
       responses:
         "204": { description: like removed successfully }
         "404": { description: error; photo not found }
+        "401": {description: operation unauthorized }
         "500": 
           description: |
             an error occured, please retry later 
@@ -270,7 +271,8 @@ paths:
           content:
             image/png:
               schema:  { $ref: "#/components/schemas/Comment" }
-        "404": { description: error; photo not found }
+        "404": { description: photo not found }
+        "401": { description: operation unauthorized }
         "500":  
           description: |
             an error occured, please retry later 
@@ -289,7 +291,8 @@ paths:
       description: allows user to delete his comment from a photo
       responses:
         "204": { description: comment removed successfully }
-        "404": { description: error; photo not found }
+        "404": { description: photo not found }
+        "401": {description: operation unauthorized }
         "500": 
           description: | 
             an error occured, please retry later 
