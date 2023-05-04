@@ -75,8 +75,6 @@ type AppDatabase interface {
 type User struct {
 	ID       string
 	Username string
-	// each user has to a profile
-	//Pr Profile
 }
 
 // structure that represents a user profile
@@ -89,6 +87,7 @@ type Profile struct {
 	Posts     int      `json:"posts"`
 }
 
+// structure that represents a photo uploaded
 type Photo struct {
 	ID          int       `json:"photoId"`
 	Owner       string    `json:"owner"`
@@ -97,6 +96,7 @@ type Photo struct {
 	DateAndTime time.Time `json:"dateAndTime"`
 }
 
+// structure that represents a comment
 type Comment struct {
 	CommentId int64  `json:"commentId"`
 	Comment   string `json:"comment"`
@@ -135,7 +135,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}, nil
 }
 
-// create the database tables
+// Create the database tables
 func createDB(db *sql.DB) error {
 	tables := [6]string{
 		`CREATE TABLE IF NOT EXISTS users(

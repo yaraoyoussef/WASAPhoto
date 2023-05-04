@@ -1,5 +1,6 @@
 package database
 
+// db function to upload photo
 func (db *appdbimpl) UploadPhoto(p Photo) (int64, error) {
 	// add photo
 	res, err := db.c.Exec("INSERT INTO photos (user, dateAndTime) VALUES (?,?)", p.Owner, p.DateAndTime)

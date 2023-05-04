@@ -1,5 +1,6 @@
 package database
 
+// db function to like a photo
 func (db *appdbimpl) LikePhoto(photoId int64, username string) error {
 	_, err := db.c.Exec("INSERT INTO likes (photoId, username) VALUES (?, ?)", photoId, username)
 	if err != nil {
