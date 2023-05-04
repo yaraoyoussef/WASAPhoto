@@ -4,7 +4,7 @@ package database
 func (db *appdbimpl) Login(p User) (string, error) {
 
 	// TO REMOVE LATER !!!!!!
-	db.c.Exec(`DELETE FROM users;`)
+	//db.c.Exec(`DELETE FROM users;`)
 	// ---------------------------------
 
 	// insert into db using query
