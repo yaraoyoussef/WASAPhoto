@@ -28,11 +28,14 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// send user info to db
-	err = rt.db.Login(user.ToDatabase())
+	id, err := rt.db.Login(user.ToDatabase())
 	if err != nil {
 		// user already exists in db
 		w.WriteHeader(http.StatusOK)
-		err = json.NewEncoder(w).Encode(user)
+		err = json.NewEncoder(w).Encode(User{
+			ID:       id,
+			Username: user.Username,
+		})
 		if err != nil {
 			// handle error on our side. Log it and send 500 to user
 			// 500 code error should be in api operation responses??
@@ -52,7 +55,14 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	// send output to user
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(user)
+	err = json.NewEncoder(w).Encode(User{
+		ID:       id,
+		Username: user.Username,
+	})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Logger.WithError(err).Error("cannot create response json file")
+	}
 }
 
 // function that creates new sub-dir for user

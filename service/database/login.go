@@ -1,13 +1,24 @@
 package database
 
 // db function to loin
-func (db *appdbimpl) Login(p User) error {
+func (db *appdbimpl) Login(p User) (string, error) {
+
+	// TO REMOVE LATER !!!!!!
+	db.c.Exec(`DELETE FROM users;`)
+	// ---------------------------------
+
 	// insert into db using query
 	_, err := db.c.Exec(`INSERT INTO users (id, username) VALUES (?, ?)`, p.Username, p.Username)
 
 	if err != nil {
-		return err
+		print(err.Error())
+		return "", err
 	}
 
-	return nil
+	err = db.c.QueryRow(`SELECT id FROM users WHERE username = ?`, p.Username).Scan(&p.ID)
+	if err != nil {
+		return "", err
+	}
+
+	return p.ID, nil
 }

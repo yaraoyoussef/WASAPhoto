@@ -46,7 +46,7 @@ const PPU = 2
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	Login(User) error
+	Login(User) (string, error)
 	GetProfile(string, string) (Profile, error)
 	SetUsername(User) error
 	FollowUser(string, string) error
