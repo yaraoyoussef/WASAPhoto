@@ -140,7 +140,7 @@ func createDB(db *sql.DB) error {
 	tables := [6]string{
 		`CREATE TABLE IF NOT EXISTS users(
 			id VARCHAR(16) NOT NULL,
-			username VARCHAR(16) NOT NULL PRIMARY KEY);`,
+			username VARCHAR(16) PRIMARY KEY);`,
 		`CREATE TABLE IF NOT EXISTS banned(
 			user VARCHAR(16) NOT NULL,
 			ubanned VARCHAR(16) NOT NULL,
