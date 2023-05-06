@@ -30,7 +30,7 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	// decode the new username
-	var newUsername string
+	var newUsername Username
 	err := json.NewDecoder(r.Body).Decode(&newUsername)
 	if err != nil {
 		// body was not parseable JSON, rejected
@@ -41,7 +41,7 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 
 	// check if new username has valid format
 	var updatedUser User
-	updatedUser.Username = newUsername
+	updatedUser.Username = newUsername.Username
 	if !updatedUser.IsValid(updatedUser.Username) {
 		w.WriteHeader(http.StatusBadRequest)
 		return

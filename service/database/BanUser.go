@@ -2,7 +2,7 @@ package database
 
 // Database function that allows user to ban another user
 func (db *appdbimpl) BanUser(cUser string, userTB string) error {
-	_, err := db.c.Exec("INSERT INTO banned (user, uBanned) VALUES (?, ?)", cUser, userTB)
+	_, err := db.c.Exec("INSERT INTO banned (username, uBanned) VALUES (?, ?)", cUser, userTB)
 	if err != nil {
 		return err
 	}
@@ -14,7 +14,7 @@ func (db *appdbimpl) CheckForBan(cUser string, bUser string) (bool, error) {
 	var counter int
 
 	// query the db
-	err := db.c.QueryRow("SELECT count(*) FROM banned WHERE user = ? AND uBanned = ?",
+	err := db.c.QueryRow("SELECT count(*) FROM banned WHERE username = ? AND uBanned = ?",
 		cUser, bUser).Scan(&counter)
 
 	// handle errors

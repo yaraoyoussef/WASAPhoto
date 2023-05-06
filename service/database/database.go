@@ -68,6 +68,7 @@ type AppDatabase interface {
 	GetComments(string, string, int64) ([]Comment, error)
 	GetLikes(string, string, int64) ([]string, error)
 	CheckForBan(string, string) (bool, error)
+	CheckForFollow(string, string) (bool, error)
 	Ping() error
 }
 
@@ -121,14 +122,14 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}
 
 	// Check if table exists. If not, the database is empty, and we need to create the structure
-	var tableName string
-	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='users';`).Scan(&tableName)
-	if errors.Is(err, sql.ErrNoRows) {
-		err = createDB(db)
-		if err != nil {
-			return nil, fmt.Errorf("error creating database structure: %w", err)
-		}
+	//var tableName string
+	//err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='users';`).Scan(&tableName)
+	//if errors.Is(err, sql.ErrNoRows) {
+	err = createDB(db)
+	if err != nil {
+		return nil, fmt.Errorf("error creating database structure: %w", err)
 	}
+	//}
 
 	return &appdbimpl{
 		c: db,
@@ -142,19 +143,19 @@ func createDB(db *sql.DB) error {
 			id VARCHAR(16) NOT NULL,
 			username VARCHAR(16) PRIMARY KEY);`,
 		`CREATE TABLE IF NOT EXISTS banned(
-			user VARCHAR(16) NOT NULL,
+			username VARCHAR(16) NOT NULL,
 			ubanned VARCHAR(16) NOT NULL,
-			PRIMARY KEY(user, uBanned),
-			FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE,
-			FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE);`,
+			PRIMARY KEY(username, uBanned),
+			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
+			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS photos(
-			photoId INTEGER PRIMARY KEY AUTOINCREMENT,
-			user VARCHAR(16) NOT NULL,
+			photoId INTEGER AUTO_INCREMENT PRIMARY KEY,
+			username VARCHAR(16) NOT NULL,
 			dateAndTime DATETIME NOT NULL,
-			FOREIGN KEY(user) REFERENCES users(username) ON DELETE CASCADE);`,
+			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS followers(
 			follower VARCHAR(16) NOT NULL, 
-			followed VARCHAR(16) NOT NULL),
+			followed VARCHAR(16) NOT NULL,
 			PRIMARY KEY(follower, followed),
 			FOREIGN KEY(follower) REFERENCES users(username) ON DELETE CASCADE,
 			FOREIGN KEY(followed) REFERENCES users(username) ON DELETE CASCADE);`,
@@ -165,7 +166,7 @@ func createDB(db *sql.DB) error {
 			FOREIGN KEY(photoId) REFERENCES photos(photoId) ON DELETE CASCADE,
 			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS comments(
-			commentId INTEGER PRIMARY KEY AUTOINCREMENT,
+			commentId INTEGER AUTO_INCREMENT PRIMARY KEY,
 			photoId INTEGER NOT NULL,
 			username VARCHAR(16) NOT NULL,
 			comment VARCHAR(500) NOT NULL,

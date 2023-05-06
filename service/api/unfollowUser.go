@@ -33,6 +33,7 @@ func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		w.WriteHeader(http.StatusNotFound)
 		return
 	} else if err != nil {
+		print("0", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

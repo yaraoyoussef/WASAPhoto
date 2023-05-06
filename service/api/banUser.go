@@ -46,19 +46,39 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// banning also means that current user will unfollow other user (if exists)
-	err = rt.db.UnfollowUser(currentUser, userToBan)
+	// check for follow
+	followed, err := rt.db.CheckForFollow(currentUser, userToBan)
 	// error handling
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	// if current user followed the banned user, unfollow him
+	if followed {
+		err = rt.db.UnfollowUser(currentUser, userToBan)
+		// error handling
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
 
 	// banned user cannot follow user anymore
-	err = rt.db.UnfollowUser(userToBan, currentUser)
-	// handling error
+	// check for follow
+	followed, err = rt.db.CheckForFollow(userToBan, currentUser)
+	// error handling
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+	// if followed, unfollow
+	if followed {
+		err = rt.db.UnfollowUser(userToBan, currentUser)
+		// handling error
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}
 
 	// response

@@ -22,7 +22,8 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	// validation of user
 	username := ps.ByName("username")
-	valid := validateUser(username, r.Header.Get("Authorization"))
+	userReq := extractBearer(r.Header.Get("Authorization"))
+	valid := validateUser(username, userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return

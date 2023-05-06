@@ -23,6 +23,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	// get the list of users that current user follows
 	followings, err := rt.db.GetFollowing(userReq)
 	if err != nil {
+		print("0", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -32,6 +33,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	for _, following := range followings {
 		followingPhotos, err := rt.db.GetPhotos(userReq, following)
 		if err != nil {
+			print("1", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

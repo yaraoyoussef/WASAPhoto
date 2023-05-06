@@ -43,7 +43,7 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	// search for user to follow in db, update its followers list, update current user's followings list
+	// call db function to update the database
 	err = rt.db.FollowUser(currentUser, userToFollow)
 	if errors.Is(err, database.ErrUserDoesNotExist) {
 		// if user to follow does not exist, return 4XX error

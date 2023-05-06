@@ -14,8 +14,8 @@ import (
 func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// get both current user and user to unban from query
-	username := r.URL.Query().Get("username")
-	otherUsername := r.URL.Query().Get("otherUsername")
+	username := ps.ByName("username")
+	otherUsername := ps.ByName("otherUsername")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))

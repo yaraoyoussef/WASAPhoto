@@ -85,7 +85,7 @@ func (db *appdbimpl) GetFollowers(user string) ([]string, error) {
 // db function that retrieves the list of photos of a user
 func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 
-	rows, err := db.c.Query("SELECT * FROM photos WHERE user = ? ORDER BY dateAndTime DESC", user)
+	rows, err := db.c.Query("SELECT * FROM photos WHERE username = ? ORDER BY dateAndTime DESC", user)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +125,8 @@ func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 // Database function that retrieves the list of comments of a photo
 func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Comment, error) {
 
-	rows, err := db.c.Query("SELECT * FROM comments WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE user = ? OR user = ?) "+
-		"AND username NOT IN (SELECT user FROM banned WHERE user = ?)",
+	rows, err := db.c.Query("SELECT * FROM comments WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE username = ? OR username = ?) "+
+		"AND username NOT IN (SELECT username FROM banned WHERE username = ?)",
 		photo, reqUser, user, reqUser)
 	if err != nil {
 		return nil, err
@@ -156,8 +156,8 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 // Database function that retrieves the list of users that liked a photo
 func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]string, error) {
 
-	rows, err := db.c.Query("SELECT username FROM likes WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE uBanner = ? OR user = ?) "+
-		"AND username NOT IN (SELECT user FROM banned WHERE uBanned = ?)",
+	rows, err := db.c.Query("SELECT username FROM likes WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE uBanner = ? OR username = ?) "+
+		"AND username NOT IN (SELECT username FROM banned WHERE uBanned = ?)",
 		photo, reqUser, user, reqUser)
 	if err != nil {
 		return nil, err
