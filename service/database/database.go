@@ -149,7 +149,7 @@ func createDB(db *sql.DB) error {
 			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
 			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS photos(
-			photoId INTEGER AUTO_INCREMENT PRIMARY KEY,
+			photoId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			username VARCHAR(16) NOT NULL,
 			dateAndTime DATETIME NOT NULL,
 			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
@@ -166,7 +166,7 @@ func createDB(db *sql.DB) error {
 			FOREIGN KEY(photoId) REFERENCES photos(photoId) ON DELETE CASCADE,
 			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS comments(
-			commentId INTEGER AUTO_INCREMENT PRIMARY KEY,
+			commentId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			photoId INTEGER NOT NULL,
 			username VARCHAR(16) NOT NULL,
 			comment VARCHAR(500) NOT NULL,

@@ -41,7 +41,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// eliminate file of the picture in question
-	path := filepath.Join(username, "photos")
+	path := filepath.Join("userFolder", username, "photos")
 	err = os.Remove(filepath.Join(path, photo))
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo does not exist")

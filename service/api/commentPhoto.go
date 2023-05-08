@@ -72,7 +72,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(Comment{
 		CommentId: commentId,
-		Username:  commenter,
+		Username:  comment.Username,
 		Comment:   comment.Comment,
 	})
 	if err != nil {

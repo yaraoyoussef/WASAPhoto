@@ -7,14 +7,14 @@ import (
 // Handler returns an instance of httprouter.Router that handle APIs registered here
 func (rt *_router) Handler() http.Handler {
 	// Register routes
-	rt.router.POST("/session", rt.wrap(rt.doLogin))                                      // tested
-	rt.router.GET("/users/:username", rt.wrap(rt.getUserProfile))                        // tested
-	rt.router.PUT("/users/:username", rt.wrap(rt.setMyUsername))                         // tested
-	rt.router.GET("/users/:username/home/", rt.wrap(rt.getMyStream))                     // tested
-	rt.router.PUT("/users/:username/follow/:otherUsername", rt.wrap(rt.followUser))      // tested
-	rt.router.DELETE("/users/:username/follow/:otherUsername", rt.wrap(rt.unfollowUser)) // tested
-	rt.router.PUT("/users/:username/ban/:otherUsername", rt.wrap(rt.banUser))            // tested
-	rt.router.DELETE("/users/:username/ban/:otherUsername", rt.wrap(rt.unbanUser))       // tested
+	rt.router.POST("/session", rt.wrap(rt.doLogin))
+	rt.router.GET("/users/:username", rt.wrap(rt.getUserProfile))
+	rt.router.PUT("/users/:username", rt.wrap(rt.setMyUsername))
+	rt.router.GET("/users/:username/home/", rt.wrap(rt.getMyStream))
+	rt.router.PUT("/users/:username/follow/:otherUsername", rt.wrap(rt.followUser))
+	rt.router.DELETE("/users/:username/follow/:otherUsername", rt.wrap(rt.unfollowUser))
+	rt.router.PUT("/users/:username/ban/:otherUsername", rt.wrap(rt.banUser))
+	rt.router.DELETE("/users/:username/ban/:otherUsername", rt.wrap(rt.unbanUser))
 	rt.router.POST("/users/:username/photos/", rt.wrap(rt.uploadPhoto))
 	rt.router.DELETE("/users/:username/photos/:photoId", rt.wrap(rt.deletePhoto))
 	rt.router.PUT("/users/:username/photos/:photoId/likes/:otherUsername", rt.wrap(rt.likePhoto))
