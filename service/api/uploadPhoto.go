@@ -43,21 +43,6 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 
-	// check the picture's format
-	//_, err = jpeg.Decode(r.Body)
-	//if err != nil {
-	// if not jpeg format
-	//	body := io.NopCloser(bytes.NewBuffer(data))
-	//	_, err = png.Decode(body)
-	//	if err != nil {
-	// if not png format
-	//	w.WriteHeader(http.StatusBadRequest)
-	//		ctx.Logger.WithError(err).Error("Picture's format incompatible")
-	//	return
-	//	}
-	//}
-	//r.Body = io.NopCloser(bytes.NewBuffer(data))
-
 	// generate photo's unique identifier
 	id, err := rt.db.UploadPhoto(post.ToDatabase())
 	if err != nil {
