@@ -17,6 +17,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	// read content of the user from request body
 	var user User
 	err := json.NewDecoder(r.Body).Decode(&user)
+
 	if err != nil {
 		// body was not parsable, so it gets rejected
 		w.WriteHeader(http.StatusBadRequest)
@@ -46,7 +47,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// create user's directories
-	err = createUserDir(user.Username, ctx)
+	err = createUserDir(id, ctx)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("couldn't create user's folder")
@@ -66,9 +67,9 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 }
 
 // function that creates new sub-dir for user
-func createUserDir(username string, ctx reqcontext.RequestContext) error {
+func createUserDir(id string, ctx reqcontext.RequestContext) error {
 	// create path for each user
-	path := filepath.Join("userFolder", username)
+	path := filepath.Join("userFolder", id)
 	// create sub-path in path for pictures of each user
 	err := os.MkdirAll(filepath.Join(path, "photos"), os.ModePerm)
 	// handle errors
