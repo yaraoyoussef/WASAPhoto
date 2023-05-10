@@ -14,20 +14,20 @@ import (
 func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// get both current user and user to unban from query
-	username := ps.ByName("username")
-	otherUsername := ps.ByName("otherUsername")
+	id := ps.ByName("id")
+	otherUserId := ps.ByName("otherUserId")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))
 	// validation
-	valid := validateUser(username, userReq)
+	valid := validateUser(id, userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
 	// do operation on database
-	err := rt.db.UnbanUser(username, otherUsername)
+	err := rt.db.UnbanUser(id, otherUserId)
 
 	// check for errors and handle them
 	if errors.Is(err, database.ErrUserDoesNotExist) {

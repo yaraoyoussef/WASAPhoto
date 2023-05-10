@@ -1,8 +1,8 @@
 package database
 
 // db function to execute the follow
-func (db *appdbimpl) FollowUser(username string, userToFollow string) error {
-	_, err := db.c.Exec("INSERT INTO followers(follower, followed) VALUES (?, ?)", username, userToFollow)
+func (db *appdbimpl) FollowUser(userId string, userToFollow string) error {
+	_, err := db.c.Exec("INSERT INTO followers(follower, followed) VALUES (?, ?)", userId, userToFollow)
 	if err != nil {
 		return err
 	}

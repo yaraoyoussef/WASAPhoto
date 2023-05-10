@@ -46,9 +46,9 @@ const PPU = 2
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	Login(User) (string, error)
-	GetProfile(string, string) (Profile, error)
-	SetUsername(User) error
+	Login(User) error
+	GetProfile(User, User) (Profile, error)
+	SetUsername(User, Username) error
 	FollowUser(string, string) error
 	UnfollowUser(string, string) error
 	BanUser(string, string) error
@@ -62,11 +62,12 @@ type AppDatabase interface {
 	UncommentPhoto(string, int64, int64) error
 
 	// utils methods
-	GetFollowers(string) ([]string, error)
-	GetFollowing(string) ([]string, error)
+	GetUsername(string) (string, error)
+	GetFollowers(string) ([]User, error)
+	GetFollowing(string) ([]User, error)
 	GetPhotos(string, string) ([]Photo, error)
 	GetComments(string, string, int64) ([]Comment, error)
-	GetLikes(string, string, int64) ([]string, error)
+	GetLikes(string, string, int64) ([]User, error)
 	CheckForBan(string, string) (bool, error)
 	CheckForFollow(string, string) (bool, error)
 	Ping() error
@@ -74,7 +75,11 @@ type AppDatabase interface {
 
 // structure that represents a user
 type User struct {
-	ID       string
+	ID string
+	// Username string
+}
+
+type Username struct {
 	Username string
 }
 
@@ -82,17 +87,17 @@ type User struct {
 type Profile struct {
 	Username string `json:"username"`
 	// photos are not strings and followers/following should be usernames not users
-	Photos    []Photo  `json:"photos"`
-	Followers []string `json:"followers"`
-	Following []string `json:"following"`
-	Posts     int      `json:"posts"`
+	Photos    []Photo `json:"photos"`
+	Followers []User  `json:"followers"`
+	Following []User  `json:"following"`
+	Posts     int     `json:"posts"`
 }
 
 // structure that represents a photo uploaded
 type Photo struct {
 	ID          int       `json:"photoId"`
 	Owner       string    `json:"owner"`
-	Likes       []string  `json:"likes"`
+	Likes       []User    `json:"likes"`
 	Comments    []Comment `json:"comments"`
 	DateAndTime time.Time `json:"dateAndTime"`
 }
@@ -101,7 +106,7 @@ type Photo struct {
 type Comment struct {
 	CommentId int64  `json:"commentId"`
 	Comment   string `json:"comment"`
-	Username  string `json:"username"`
+	UserId    string `json:"userId"`
 }
 
 type appdbimpl struct {
@@ -140,38 +145,38 @@ func New(db *sql.DB) (AppDatabase, error) {
 func createDB(db *sql.DB) error {
 	tables := [6]string{
 		`CREATE TABLE IF NOT EXISTS users(
-			id VARCHAR(16) NOT NULL,
-			username VARCHAR(16) PRIMARY KEY);`,
+			id VARCHAR(16) NOT NULL PRIMARY KEY,
+			username VARCHAR(16) NOT NULL);`,
 		`CREATE TABLE IF NOT EXISTS banned(
-			username VARCHAR(16) NOT NULL,
-			ubanned VARCHAR(16) NOT NULL,
-			PRIMARY KEY(username, uBanned),
-			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
+			userId VARCHAR(16) NOT NULL,
+			ubannedId VARCHAR(16) NOT NULL,
+			PRIMARY KEY(userId, uBannedId),
+			FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,
+			FOREIGN KEY(uBannedId) REFERENCES users(id) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS photos(
 			photoId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			username VARCHAR(16) NOT NULL,
+			userId VARCHAR(16) NOT NULL,
 			dateAndTime DATETIME NOT NULL,
-			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
+			FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS followers(
 			follower VARCHAR(16) NOT NULL, 
 			followed VARCHAR(16) NOT NULL,
 			PRIMARY KEY(follower, followed),
-			FOREIGN KEY(follower) REFERENCES users(username) ON DELETE CASCADE,
-			FOREIGN KEY(followed) REFERENCES users(username) ON DELETE CASCADE);`,
+			FOREIGN KEY(follower) REFERENCES users(id) ON DELETE CASCADE,
+			FOREIGN KEY(followed) REFERENCES users(id) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS likes(
 			photoId INTEGER NOT NULL,
-			username VARCHAR(16) NOT NULL, 
-			PRIMARY KEY(photoId, username),
+			userId VARCHAR(16) NOT NULL, 
+			PRIMARY KEY(photoId, userId),
 			FOREIGN KEY(photoId) REFERENCES photos(photoId) ON DELETE CASCADE,
-			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
+			FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE);`,
 		`CREATE TABLE IF NOT EXISTS comments(
 			commentId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			photoId INTEGER NOT NULL,
-			username VARCHAR(16) NOT NULL,
+			userId VARCHAR(16) NOT NULL,
 			comment VARCHAR(500) NOT NULL,
 			FOREIGN KEY(photoId) REFERENCES photos(photoId) ON DELETE CASCADE,
-			FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);`,
+			FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE);`,
 	}
 
 	// executes all queries

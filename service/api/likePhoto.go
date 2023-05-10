@@ -10,11 +10,11 @@ import (
 
 // function to like post of another user
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	username := ps.ByName("username")
-	userLiked := ps.ByName("otherUsername")
+	userId := ps.ByName("id")
+	userLiked := ps.ByName("otherUserId")
 
 	// user cannot like his own picture
-	if userLiked == username {
+	if userLiked == userId {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -27,7 +27,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	}
 
 	// check if user who wants to like was banned by the user owner of the post
-	banned, err := rt.db.CheckForBan(username, userLiked)
+	banned, err := rt.db.CheckForBan(userId, userLiked)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("an error occured in database")

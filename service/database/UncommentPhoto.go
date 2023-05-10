@@ -11,9 +11,9 @@ func (db *appdbimpl) UncommentPhotoOwner(pId int64, cId int64) error {
 }
 
 // db function to uncomment a photo given the photo id, comment id and username
-func (db *appdbimpl) UncommentPhoto(username string, pId int64, cId int64) error {
-	_, err := db.c.Exec("DELETE FROM comments WHERE (photoId = ? AND username = ? AND commentId = ?)",
-		pId, username, cId)
+func (db *appdbimpl) UncommentPhoto(userId string, pId int64, cId int64) error {
+	_, err := db.c.Exec("DELETE FROM comments WHERE (photoId = ? AND userId = ? AND commentId = ?)",
+		pId, userId, cId)
 	if err != nil {
 		return err
 	}

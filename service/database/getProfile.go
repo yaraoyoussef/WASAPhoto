@@ -1,17 +1,21 @@
 package database
 
 // db function that retrieves the profile of a user given its username
-func (db *appdbimpl) GetProfile(username string, reqUser string) (Profile, error) {
+func (db *appdbimpl) GetProfile(user User, reqUser User) (Profile, error) {
 	var profile Profile
-	following, err := db.GetFollowing(username)
+	following, err := db.GetFollowing(user.ID)
 	if err != nil {
 		return profile, err
 	}
-	followers, err := db.GetFollowers(username)
+	followers, err := db.GetFollowers(user.ID)
 	if err != nil {
 		return profile, err
 	}
-	photos, err := db.GetPhotos(reqUser, username)
+	photos, err := db.GetPhotos(reqUser.ID, user.ID)
+	if err != nil {
+		return profile, err
+	}
+	username, err := db.GetUsername(user.ID)
 	if err != nil {
 		return profile, err
 	}
@@ -29,7 +33,7 @@ func (db *appdbimpl) GetProfile(username string, reqUser string) (Profile, error
 }
 
 // db function that retrieves the list of users followed by the user
-func (db *appdbimpl) GetFollowing(user string) ([]string, error) {
+func (db *appdbimpl) GetFollowing(user string) ([]User, error) {
 
 	rows, err := db.c.Query("SELECT followed FROM followers WHERE follower = ?", user)
 	if err != nil {
@@ -39,14 +43,15 @@ func (db *appdbimpl) GetFollowing(user string) ([]string, error) {
 	defer func() { _ = rows.Close() }()
 
 	// Read all the users appending the list
-	var following []string
+	var following []User
 	for rows.Next() {
 		var followed string
 		err = rows.Scan(&followed)
 		if err != nil {
 			return nil, err
 		}
-		following = append(following, followed)
+		user := User{ID: followed}
+		following = append(following, user)
 	}
 
 	if rows.Err() != nil {
@@ -56,7 +61,7 @@ func (db *appdbimpl) GetFollowing(user string) ([]string, error) {
 }
 
 // db function that retrieves the list of users following the current user
-func (db *appdbimpl) GetFollowers(user string) ([]string, error) {
+func (db *appdbimpl) GetFollowers(user string) ([]User, error) {
 
 	rows, err := db.c.Query("SELECT follower FROM followers WHERE followed = ?", user)
 	if err != nil {
@@ -66,14 +71,15 @@ func (db *appdbimpl) GetFollowers(user string) ([]string, error) {
 	defer func() { _ = rows.Close() }()
 
 	// Read all the users appending the list
-	var followers []string
+	var followers []User
 	for rows.Next() {
 		var follower string
 		err = rows.Scan(&follower)
+		user := User{ID: follower}
 		if err != nil {
 			return nil, err
 		}
-		followers = append(followers, follower)
+		followers = append(followers, user)
 	}
 
 	if rows.Err() != nil {
@@ -85,7 +91,7 @@ func (db *appdbimpl) GetFollowers(user string) ([]string, error) {
 // db function that retrieves the list of photos of a user
 func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 
-	rows, err := db.c.Query("SELECT * FROM photos WHERE username = ? ORDER BY dateAndTime DESC", user)
+	rows, err := db.c.Query("SELECT * FROM photos WHERE userId = ? ORDER BY dateAndTime DESC", user)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +131,8 @@ func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 // Database function that retrieves the list of comments of a photo
 func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Comment, error) {
 
-	rows, err := db.c.Query("SELECT * FROM comments WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE username = ? OR username = ?) "+
-		"AND username NOT IN (SELECT username FROM banned WHERE username = ?)",
+	rows, err := db.c.Query("SELECT * FROM comments WHERE photoId = ? AND userId NOT IN (SELECT uBannedId FROM banned WHERE userId = ? OR userId = ?) "+
+		"AND userId NOT IN (SELECT userId FROM banned WHERE userId = ?)",
 		photo, reqUser, user, reqUser)
 	if err != nil {
 		return nil, err
@@ -139,7 +145,7 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 	var comments []Comment
 	for rows.Next() {
 		var comment Comment
-		err = rows.Scan(&comment.CommentId, &comment.Username, &comment.Comment)
+		err = rows.Scan(&comment.CommentId, &comment.UserId, &comment.Comment)
 		if err != nil {
 			return nil, err
 		}
@@ -154,10 +160,10 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 }
 
 // Database function that retrieves the list of users that liked a photo
-func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]string, error) {
+func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]User, error) {
 
-	rows, err := db.c.Query("SELECT username FROM likes WHERE photoId = ? AND username NOT IN (SELECT uBanned FROM banned WHERE uBanner = ? OR username = ?) "+
-		"AND username NOT IN (SELECT username FROM banned WHERE uBanned = ?)",
+	rows, err := db.c.Query("SELECT userId FROM likes WHERE photoId = ? AND userId NOT IN (SELECT uBannedId FROM banned WHERE uBannedId = ? OR userId = ?) "+
+		"AND userId NOT IN (SELECT userId FROM banned WHERE uBannedId = ?)",
 		photo, reqUser, user, reqUser)
 	if err != nil {
 		return nil, err
@@ -166,20 +172,31 @@ func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]strin
 	defer func() { _ = rows.Close() }()
 
 	// Read all the users in the list
-	var likes []string
+	var likes []User
 	for rows.Next() {
 		var lUser string
 		err = rows.Scan(&lUser)
+		user := User{ID: lUser}
 		if err != nil {
 			return nil, err
 		}
 
-		likes = append(likes, lUser)
+		likes = append(likes, user)
 	}
 
 	if rows.Err() != nil {
 		return nil, err
 	}
 	return likes, nil
+
+}
+
+func (db *appdbimpl) GetUsername(user string) (string, error) {
+	var username string
+	err := db.c.QueryRow("SELECT username FROM users WHERE id =?", user).Scan(&username)
+	if err != nil {
+		return "", err
+	}
+	return username, nil
 
 }

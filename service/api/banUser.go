@@ -13,8 +13,8 @@ import (
 
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	// extract both usernames from path
-	currentUser := ps.ByName("username")
-	userToBan := ps.ByName("otherUsername")
+	currentUser := ps.ByName("id")
+	userToBan := ps.ByName("otherUserId")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))

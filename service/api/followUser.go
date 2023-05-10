@@ -13,8 +13,8 @@ import (
 
 func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	// extract both usernames from query
-	currentUser := ps.ByName("username")
-	userToFollow := ps.ByName("otherUsername")
+	currentUser := ps.ByName("id")
+	userToFollow := ps.ByName("otherUserId")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))

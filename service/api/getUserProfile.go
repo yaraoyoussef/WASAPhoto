@@ -16,19 +16,19 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	var err error
 	var profile database.Profile
 
-	// get username of current user
+	// get id of current user
 	cUser := extractBearer(r.Header.Get("Authorization"))
-	// get username requested by user
-	username := ps.ByName("username")
+	// get id requested by user
+	id := ps.ByName("id")
 
-	// check if username is empty
-	if username == "" {
+	// check if id is empty
+	if id == "" {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
 	// check if cUser is banned by other user
-	banned, err := rt.db.CheckForBan(username, cUser)
+	banned, err := rt.db.CheckForBan(id, cUser)
 	// handle error
 	if err != nil {
 		ctx.Logger.WithError(err).Error("an error occured")
@@ -42,7 +42,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	// get profile from db
-	profile, err1 := rt.db.GetProfile(username, cUser)
+	profile, err1 := rt.db.GetProfile(User{ID: id}.ToDatabase(), User{ID: cUser}.ToDatabase())
 	// error handling
 	if err1 != nil {
 		ctx.Logger.WithError(err).Error("error while executing request")

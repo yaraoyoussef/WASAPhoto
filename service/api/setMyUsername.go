@@ -17,13 +17,13 @@ var CurrentUser User
 // function used to change username of current user
 func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// take username
-	username := ps.ByName("username")
+	// take id
+	id := ps.ByName("id")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))
 	// validation
-	valid := validateUser(username, userReq)
+	valid := validateUser(id, userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -40,21 +40,19 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	// check if new username has valid format
-	var updatedUser User
-	updatedUser.Username = newUsername.Username
-	if !updatedUser.IsValid(updatedUser.Username) {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	// set new user id to user id
-	updatedUser.ID = username
+	//var updatedUser User
+	//updatedUser.Username = newUsername.Username
+	//if !updatedUser.IsValid(updatedUser.Username) {
+	//	w.WriteHeader(http.StatusBadRequest)
+	//	return
+	//}
 
-	err = rt.db.SetUsername(updatedUser.ToDatabase())
+	err = rt.db.SetUsername(User{ID: id}.ToDatabase(), newUsername.ToDatabase())
 	if errors.Is(err, database.ErrCouldNotModify) {
 		w.WriteHeader(http.StatusConflict)
 		return
 	} else if err != nil {
-		ctx.Logger.WithError(err).WithField("username", username).Error("couldn't update username")
+		ctx.Logger.WithError(err).Error("couldn't update username")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

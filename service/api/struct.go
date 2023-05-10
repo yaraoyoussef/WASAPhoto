@@ -7,8 +7,7 @@ import (
 )
 
 type User struct {
-	ID       string `json:"ID"`
-	Username string `json:"username"`
+	ID string `json:"ID"`
 }
 
 type Username struct {
@@ -18,8 +17,8 @@ type Username struct {
 type Profile struct {
 	Username  string           `json:"username"`
 	Photos    []database.Photo `json:"photos"`
-	Followers []string         `json:"followers"`
-	Following []string         `json:"following"`
+	Followers []database.User  `json:"followers"`
+	Following []database.User  `json:"following"`
 	Posts     int              `json:"posts"`
 }
 
@@ -30,7 +29,7 @@ type Stream struct {
 type Photo struct {
 	ID          int                `json:"photoId"`
 	Owner       string             `json:"owner"`
-	Likes       []string           `json:"likes"`
+	Likes       []database.User    `json:"likes"`
 	Comments    []database.Comment `json:"comments"`
 	DateAndTime time.Time          `json:"dateAndTime"`
 }
@@ -38,13 +37,12 @@ type Photo struct {
 type Comment struct {
 	CommentId int64  `json:"commentId"`
 	Comment   string `json:"comment"`
-	Username  string `json:"username"`
+	UserId    string `json:"userId"`
 }
 
-func (p *User) ToDatabase() database.User {
+func (p User) ToDatabase() database.User {
 	return database.User{
-		ID:       p.ID,
-		Username: p.Username,
+		ID: p.ID,
 	}
 }
 
@@ -55,6 +53,12 @@ func (p *Profile) ToDatabase() database.Profile {
 		Followers: p.Followers,
 		Following: p.Following,
 		Posts:     p.Posts,
+	}
+}
+
+func (u Username) ToDatabase() database.Username {
+	return database.Username{
+		Username: u.Username,
 	}
 }
 
@@ -80,6 +84,6 @@ func (c *Comment) ToDatabase() database.Comment {
 	return database.Comment{
 		CommentId: c.CommentId,
 		Comment:   c.Comment,
-		Username:  c.Username,
+		UserId:    c.UserId,
 	}
 }

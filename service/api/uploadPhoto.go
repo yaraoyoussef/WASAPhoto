@@ -19,9 +19,9 @@ import (
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// validation of user
-	username := ps.ByName("username")
+	userId := ps.ByName("id")
 	userReq := extractBearer(r.Header.Get("Authorization"))
-	valid := validateUser(username, userReq)
+	valid := validateUser(userId, userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -29,7 +29,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 	// initialize photo structure
 	post := Photo{
-		Owner:       username,
+		Owner:       userReq,
 		DateAndTime: time.Now().UTC(),
 	}
 
@@ -54,7 +54,7 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	photoId := strconv.FormatInt(id, 10)
 
 	// create dir for user to save images
-	path := filepath.Join("userFolder", username, "photos")
+	path := filepath.Join("userFolder", userId, "photos")
 	// create file to store content
 	res, err := os.Create(filepath.Join(path, photoId))
 	if err != nil {

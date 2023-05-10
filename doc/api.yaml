@@ -28,8 +28,8 @@ paths:
                   description: the username of the user trying to log-in 
                   example: maria77 
                   pattern: '^([a-z0-9._-])\w+$'
-                  minLength: 3 
-                  maxLength: 16
+                  minLength: 5 
+                  maxLength: 15
         required: true
       responses:
         '201':
@@ -44,9 +44,9 @@ paths:
                     type: string
                     description: the unique id generated for the user 
                     example: "abcdef012345"
-  /users/{username}:
+  /users/{id}:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
     get:
       tags:
         - Users 
@@ -54,7 +54,7 @@ paths:
         - bearerAuth: []
       operationId: getUserProfile
       summary: shows the profile of a specific user
-      description: given a username, it displays its profile
+      description: given a user's id, it displays its profile
       responses:
         "200":
           description: user found and personal page is displayed
@@ -84,9 +84,9 @@ paths:
         "403": { description: Username already in use }
         "401": {description: operation unauthorized }
         "500": { description: an error occured please try again later }
-  /users/{username}/home/:
+  /users/{id}/home/:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
     get:
       tags: 
         - Personal Profile 
@@ -106,10 +106,10 @@ paths:
         "500": 
           description: | 
             could not load feed, please try again later 
-  /users/{username}/follow/{otherUsername}:
+  /users/{id}/follow/{otherUserId}:
     parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/OtherUsername"
+      - $ref: "#/components/parameters/Id"
+      - $ref: "#/components/parameters/OtherUserId"
     put:
       tags:
         - Follow
@@ -136,10 +136,10 @@ paths:
         "404": { description: user not found }
         "401": {description: operation unauthorized }
         "500": { description: failed to unfollow this user }
-  /users/{username}/banned/{otherUsername}:
+  /users/{id}/banned/{otherUserId}:
     parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/OtherUsername"
+      - $ref: "#/components/parameters/Id"
+      - $ref: "#/components/parameters/OtherUserId"
     put:
       tags:
         - Ban 
@@ -166,9 +166,9 @@ paths:
         "404": { description: error; user not found }
         "401": {description: operation unauthorized }
         "500": { description: failed to unban user }
-  /users/{username}/photos/:
+  /users/{id}/photos/:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
     post:
       tags: 
         - Photos
@@ -194,9 +194,9 @@ paths:
         "404": {description: photo not found }
         "401": {description: operation unauthorized }
         "500": { description: an error occured please try again later }
-  /users/{username}/photos/{photoId}:
+  /users/{id}/photos/{photoId}:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
       - $ref: "#/components/parameters/PhotoId"
     delete:
       tags: 
@@ -211,11 +211,11 @@ paths:
         "404": { description: error; photo not found }
         "401": {description: operation unauthorized }
         "500": { description: an error occured please try again later } 
-  /users/{username}/photos/{photoId}/likes/{otherUsername}:
+  /users/{id}/photos/{photoId}/likes/{otherUserId}:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
       - $ref: "#/components/parameters/PhotoId"
-      - $ref: "#/components/parameters/OtherUsername"
+      - $ref: "#/components/parameters/OtherUserId"
     put:
       tags: 
         - Likes
@@ -247,9 +247,9 @@ paths:
         "500": 
           description: |
             an error occured, please retry later 
-  /users/{username}/photos/{photoId}/comments:
+  /users/{id}/photos/{photoId}/comments:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
       - $ref: "#/components/parameters/PhotoId"
     post:
       tags: 
@@ -276,9 +276,9 @@ paths:
         "500":  
           description: |
             an error occured, please retry later 
-  /users/{username}/photos/{photoId}/comments/{commentId}:
+  /users/{id}/photos/{photoId}/comments/{commentId}:
     parameters:
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/Id"
       - $ref: "#/components/parameters/PhotoId"
       - $ref: "#/components/parameters/CommentId"
     delete:
@@ -419,6 +419,17 @@ components:
           minItems: 0
           maxItems: 100000000000
   parameters:
+    Id:
+      schema:
+        type: string
+        pattern: '^([a-z0-9._-])\w+$'
+        minLength: 5
+        maxLength: 15
+        example: abcdef012345
+      name: id
+      in: path
+      required: true
+      description: id of the authorised user
     Username:
       schema:
         type: string
@@ -430,17 +441,17 @@ components:
       in: path
       required: true
       description: username of the authorised user
-    OtherUsername:
+    OtherUserId:
       schema:
         type: string
         pattern: '^([a-z0-9._-])\w+$'
         minLength: 5
         maxLength: 15
-        example: bob77
-      name: otherUsername
+        example: abcdef012345
+      name: otherUserId
       in: path
       required: true
-      description: username of a user
+      description: id of a user
     PhotoId:
       schema:
         type: number

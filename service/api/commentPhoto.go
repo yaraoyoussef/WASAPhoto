@@ -14,7 +14,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	var comment Comment
 
 	// extract photo owner and the commenter
-	photoOwner := ps.ByName("username")
+	photoOwner := ps.ByName("id")
 	commenter := extractBearer(r.Header.Get("Authorization"))
 
 	// if commenter is not logged in
@@ -72,7 +72,7 @@ func (rt *_router) commentPhoto(w http.ResponseWriter, r *http.Request, ps httpr
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(Comment{
 		CommentId: commentId,
-		Username:  comment.Username,
+		UserId:    comment.UserId,
 		Comment:   comment.Comment,
 	})
 	if err != nil {

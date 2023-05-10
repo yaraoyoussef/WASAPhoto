@@ -14,7 +14,7 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))
 	// validation
-	valid := validateUser(ps.ByName("username"), userReq)
+	valid := validateUser(ps.ByName("id"), userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -23,7 +23,6 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	// get the list of users that current user follows
 	followings, err := rt.db.GetFollowing(userReq)
 	if err != nil {
-		print("0", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -31,9 +30,8 @@ func (rt *_router) getMyStream(w http.ResponseWriter, r *http.Request, ps httpro
 	// get photos of each of the followings
 	var photos []database.Photo
 	for _, following := range followings {
-		followingPhotos, err := rt.db.GetPhotos(userReq, following)
+		followingPhotos, err := rt.db.GetPhotos(userReq, following.ID)
 		if err != nil {
-			print("1", err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}

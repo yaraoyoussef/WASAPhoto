@@ -13,11 +13,11 @@ import (
 func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// get photo id and username
-	username := ps.ByName("username")
+	userId := ps.ByName("id")
 	photo := ps.ByName("photoId")
 
 	// validation
-	valid := validateUser(username, extractBearer(r.Header.Get("Authorization")))
+	valid := validateUser(userId, extractBearer(r.Header.Get("Authorization")))
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
@@ -33,7 +33,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// call to db function to delete picture
-	err = rt.db.DeletePhoto(username, photoId)
+	err = rt.db.DeletePhoto(userId, photoId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("an error occured, could not delete post")
@@ -41,7 +41,7 @@ func (rt *_router) deletePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	}
 
 	// eliminate file of the picture in question
-	path := filepath.Join("userFolder", username, "photos")
+	path := filepath.Join("userFolder", userId, "photos")
 	err = os.Remove(filepath.Join(path, photo))
 	if err != nil {
 		ctx.Logger.WithError(err).Error("photo does not exist")

@@ -23,19 +23,18 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		w.WriteHeader(http.StatusBadRequest)
 		return
 		// validation of user's structure content
-	} else if !user.IsValid(user.Username) {
+	} else if !user.IsValid(user.ID) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	// send user info to db
-	id, err := rt.db.Login(user.ToDatabase())
+	err = rt.db.Login(user.ToDatabase())
 	if err != nil {
 		// user already exists in db
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(User{
-			ID:       id,
-			Username: user.Username,
+			ID: user.ID,
 		})
 		if err != nil {
 			// handle error on our side. Log it and send 500 to user
@@ -47,7 +46,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// create user's directories
-	err = createUserDir(id, ctx)
+	err = createUserDir(user.ID, ctx)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("couldn't create user's folder")
@@ -57,8 +56,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 	// send output to user
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(User{
-		ID:       id,
-		Username: user.Username,
+		ID: user.ID,
 	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

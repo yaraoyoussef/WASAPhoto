@@ -13,20 +13,20 @@ import (
 
 func (rt *_router) unfollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 	// get both current user and user to unfollow from query
-	username := ps.ByName("username")
-	otherUsername := ps.ByName("otherUsername")
+	id := ps.ByName("id")
+	otherUserId := ps.ByName("otherUserId")
 
 	// extract from header
 	userReq := extractBearer(r.Header.Get("Authorization"))
 	// validation
-	valid := validateUser(username, userReq)
+	valid := validateUser(id, userReq)
 	if valid != 0 {
 		w.WriteHeader(valid)
 		return
 	}
 
 	// do operation on database
-	err := rt.db.UnfollowUser(username, otherUsername)
+	err := rt.db.UnfollowUser(id, otherUserId)
 
 	// check for errors and handle them
 	if errors.Is(err, database.ErrUserDoesNotExist) {

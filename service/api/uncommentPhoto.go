@@ -20,7 +20,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	// check if user was banned by owner
-	banned, err := rt.db.CheckForBan(ps.ByName("username"), reqUser)
+	banned, err := rt.db.CheckForBan(ps.ByName("id"), reqUser)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		ctx.Logger.WithError(err).Error("error while executing query")
@@ -50,7 +50,7 @@ func (rt *_router) uncommentPhoto(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	// check if owner of post is removing the comment
-	if ps.ByName("username") == reqUser {
+	if ps.ByName("id") == reqUser {
 		err = rt.db.UncommentPhotoOwner(photoId, commentId)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

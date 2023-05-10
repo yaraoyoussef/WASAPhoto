@@ -10,8 +10,8 @@ import (
 
 // function to unlike photo
 func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	photoOwner := ps.ByName("username")
-	reqUser := ps.ByName("otherUsername")
+	photoOwner := ps.ByName("id")
+	reqUser := ps.ByName("otherUserId")
 
 	// validation
 	valid := validateUser(reqUser, extractBearer(r.Header.Get("Authorization")))
