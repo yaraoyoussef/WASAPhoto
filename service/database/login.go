@@ -7,7 +7,6 @@ func (db *appdbimpl) Login(p User) error {
 	_, err := db.c.Exec(`INSERT INTO users (id, username) VALUES (?, ?)`, p.ID, p.ID)
 
 	if err != nil {
-		print(err.Error())
 		return err
 	}
 
