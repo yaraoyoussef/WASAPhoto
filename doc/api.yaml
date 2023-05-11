@@ -19,31 +19,14 @@ paths:
         description: User details 
         content:
           application/json: 
-            schema:
-              type: object 
-              description: contains the username
-              properties:
-                name:
-                  type: string 
-                  description: the username of the user trying to log-in 
-                  example: maria77 
-                  pattern: '^([a-z0-9._-])\w+$'
-                  minLength: 5 
-                  maxLength: 15
+            schema: { $ref: "#/components/schemas/Username" }
         required: true
       responses:
         '201':
           description: User log-in action successful 
           content:
             application/json: 
-              schema:
-                type: object 
-                description: contains the unique id generated for the user 
-                properties:
-                  identifier: 
-                    type: string
-                    description: the unique id generated for the user 
-                    example: "abcdef012345"
+              schema: { $ref: "#/components/schemas/UserId"}
   /users/{id}:
     parameters:
       - $ref: "#/components/parameters/Id"
@@ -79,10 +62,11 @@ paths:
         content:
           application/json:
             schema: { $ref: "#/components/schemas/Username" }
+        required: true
       responses:
         "204": { description: Username updated successfully }
         "403": { description: Username already in use }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: an error occured please try again later }
   /users/{id}/home/:
     parameters:
@@ -102,7 +86,7 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Stream" }
         "404": { description: page not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": 
           description: | 
             could not load feed, please try again later 
@@ -121,7 +105,7 @@ paths:
       responses:
         "204": { description: user followed successfully }
         "404": { description: user not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: failed to follow this user }
     delete:
       tags: 
@@ -134,7 +118,7 @@ paths:
       responses:
         "204": { description: user unfollowed successfully }
         "404": { description: user not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: failed to unfollow this user }
   /users/{id}/banned/{otherUserId}:
     parameters:
@@ -151,7 +135,7 @@ paths:
       responses:
         "204": { description: user banned successfully }
         "404": { description: user not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: failed to ban user }
     delete:
       tags: 
@@ -164,7 +148,7 @@ paths:
       responses:
         "204": { description: user unbanned successfully }
         "404": { description: error; user not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: failed to unban user }
   /users/{id}/photos/:
     parameters:
@@ -182,8 +166,7 @@ paths:
       requestBody:
         content:
           image/png:
-            schema:
-              $ref: "#/components/schemas/RawPhoto"
+            schema: { $ref: "#/components/schemas/RawPhoto" }
         required: true
       responses:
         "201":
@@ -191,8 +174,8 @@ paths:
           content:
             image/png: 
               schema: { $ref: "#/components/schemas/Photo" }
-        "404": {description: photo not found }
-        "401": {description: operation unauthorized }
+        "404": { description: photo not found }
+        "401": { description: operation unauthorized }
         "500": { description: an error occured please try again later }
   /users/{id}/photos/{photoId}:
     parameters:
@@ -209,7 +192,7 @@ paths:
       responses:
         "204": { description: photo deleted successfully }
         "404": { description: error; photo not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": { description: an error occured please try again later } 
   /users/{id}/photos/{photoId}/likes/{otherUserId}:
     parameters:
@@ -228,7 +211,7 @@ paths:
         "204": 
           description: photo liked successfully
         "404": { description: photo not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500":  
           description: |
             an errror occured, please try again later 
@@ -243,7 +226,7 @@ paths:
       responses:
         "204": { description: like removed successfully }
         "404": { description: error; photo not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": 
           description: |
             an error occured, please retry later 
@@ -265,6 +248,7 @@ paths:
         content:
           application/json:
             schema: { $ref: "#/components/schemas/Comment" }
+        required: true
       responses:
         "201":
           description: comment added successfully
@@ -292,7 +276,7 @@ paths:
       responses:
         "204": { description: comment removed successfully }
         "404": { description: photo not found }
-        "401": {description: operation unauthorized }
+        "401": { description: operation unauthorized }
         "500": 
           description: | 
             an error occured, please retry later 
@@ -317,13 +301,13 @@ components:
         followers:
           type: array
           description: represents the followers of a given user 
-          items: { $ref: "#/components/schemas/Username"}
+          items: { $ref: "#/components/schemas/UserId"}
           minItems: 0
           maxItems: 100000000000
         following:
           type: array
           description: represents the followings of a given user 
-          items: { $ref: "#/components/schemas/Username"}
+          items: { $ref: "#/components/schemas/UserId"}
           minItems: 0
           maxItems: 100000000000
         posts:
@@ -342,11 +326,23 @@ components:
           minLength: 5
           maxLength: 15
           example: maria77
+    UserId: 
+      title: UserId
+      description: id of user 
+      type: object
+      properties:
+        userId:
+          description: string between 5 and 15 characters
+          type: string 
+          pattern: '^([a-z0-9._-])\w+$'
+          minLength: 5
+          maxLength: 15
+          example: maria77
     RawPhoto:
       description: contains the raw image the user wants to upload
       type: object
       properties:
-        data: 
+        imgData: 
           description: data of the image
           type: string
           format: binary
@@ -366,13 +362,13 @@ components:
           type: number
           example: 10097
         owner:
-          description: username of user that uploaded the photo
-          $ref: "#/components/schemas/Username"
+          description: id of user that uploaded the photo
+          $ref: "#/components/schemas/UserId"
         likes:
           description: represents the lits of likes on a given photo
           type: array
           items:
-            $ref: "#/components/schemas/Username"
+            $ref: "#/components/schemas/UserId"
           minItems: 0
           maxItems: 100000000000
           example: [maria77, bob77]
@@ -399,7 +395,7 @@ components:
           type: number
           description: represents the id of a comment 
           example: 01
-        username: { $ref: "#/components/schemas/Username" }
+        userId: { $ref: "#/components/schemas/UserId" }
         comment: 
           type: string 
           description: the comment itself 
