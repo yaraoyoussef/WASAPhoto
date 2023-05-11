@@ -6,14 +6,17 @@ import (
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
 )
 
+// structure that represents a user
 type User struct {
 	ID string `json:"ID"`
 }
 
+// structure that represents a username
 type Username struct {
 	Username string `json:"username"`
 }
 
+// structre that represents a profile
 type Profile struct {
 	Username  string           `json:"username"`
 	Photos    []database.Photo `json:"photos"`
@@ -22,10 +25,12 @@ type Profile struct {
 	Posts     int              `json:"posts"`
 }
 
+// structre that represents the stream in home screen of current user
 type Stream struct {
 	Photos []database.Photo `json:"data"`
 }
 
+// structre that represents a photo
 type Photo struct {
 	ID          int                `json:"photoId"`
 	Owner       string             `json:"owner"`
@@ -34,6 +39,7 @@ type Photo struct {
 	DateAndTime time.Time          `json:"dateAndTime"`
 }
 
+// structre that represents a comment
 type Comment struct {
 	CommentId int64  `json:"commentId"`
 	Comment   string `json:"comment"`

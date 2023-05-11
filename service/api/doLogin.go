@@ -1,7 +1,5 @@
 package api
 
-// DONE
-
 import (
 	"encoding/json"
 	"net/http"
@@ -23,7 +21,7 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		w.WriteHeader(http.StatusBadRequest)
 		return
 		// validation of user's structure content
-	} else if !user.IsValid(user.ID) {
+	} else if !IsValid(user.ID) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

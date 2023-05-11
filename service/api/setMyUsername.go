@@ -1,7 +1,5 @@
 package api
 
-// DONE
-
 import (
 	"encoding/json"
 	"errors"
@@ -39,13 +37,11 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	// check if new username has valid format
-	//var updatedUser User
-	//updatedUser.Username = newUsername.Username
-	//if !updatedUser.IsValid(updatedUser.Username) {
-	//	w.WriteHeader(http.StatusBadRequest)
-	//	return
-	//}
+	// check if username format is valid
+	if !IsValid(newUsername.Username) {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	err = rt.db.SetUsername(User{ID: id}.ToDatabase(), newUsername.ToDatabase())
 	if errors.Is(err, database.ErrCouldNotModify) {

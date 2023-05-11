@@ -1,7 +1,5 @@
 package api
 
-// DONE
-
 import (
 	"errors"
 	"net/http"

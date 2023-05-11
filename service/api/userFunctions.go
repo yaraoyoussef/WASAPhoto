@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-// function to validate username's format
-func (p *User) IsValid(id string) bool {
-	var trimmed = strings.TrimSpace(id)
+// function to validate id's and username's format
+func IsValid(s string) bool {
+	var trimmed = strings.TrimSpace(s)
 	re := regexp.MustCompile(`^([a-z0-9._-])\w+$`)
 	return re.MatchString(trimmed) && len(trimmed) >= 3 && len(trimmed) <= 16
 }
