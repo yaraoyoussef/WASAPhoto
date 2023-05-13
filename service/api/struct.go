@@ -25,11 +25,6 @@ type Profile struct {
 	Posts     int              `json:"posts"`
 }
 
-// structre that represents the stream in home screen of current user
-type Stream struct {
-	Photos []database.Photo `json:"data"`
-}
-
 // structre that represents a photo
 type Photo struct {
 	ID          int                `json:"photoId"`
