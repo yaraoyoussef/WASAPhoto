@@ -218,9 +218,4 @@
   min-width: 14px;
   position: relative;
 }
-</style>
-
-
-
-  
-    
+</style>  
