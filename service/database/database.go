@@ -76,7 +76,6 @@ type AppDatabase interface {
 // structure that represents a user
 type User struct {
 	ID string
-	// Username string
 }
 
 type Username struct {
@@ -85,8 +84,7 @@ type Username struct {
 
 // structure that represents a user profile
 type Profile struct {
-	Username string `json:"username"`
-	// photos are not strings and followers/following should be usernames not users
+	Username  string  `json:"username"`
 	Photos    []Photo `json:"photos"`
 	Followers []User  `json:"followers"`
 	Following []User  `json:"following"`
@@ -126,15 +124,10 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, fmt.Errorf("error enforcing foreign keys: %w", err)
 	}
 
-	// Check if table exists. If not, the database is empty, and we need to create the structure
-	//var tableName string
-	//err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='users';`).Scan(&tableName)
-	//if errors.Is(err, sql.ErrNoRows) {
 	err = createDB(db)
 	if err != nil {
 		return nil, fmt.Errorf("error creating database structure: %w", err)
 	}
-	//}
 
 	return &appdbimpl{
 		c: db,

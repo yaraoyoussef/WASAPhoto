@@ -191,6 +191,7 @@ func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]User,
 
 }
 
+// db function to get username
 func (db *appdbimpl) GetUsername(user string) (string, error) {
 	var username string
 	err := db.c.QueryRow("SELECT username FROM users WHERE id =?", user).Scan(&username)
