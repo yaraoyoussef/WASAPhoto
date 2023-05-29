@@ -54,7 +54,7 @@ paths:
         - Personal Profile 
       security:
         - bearerAuth: []
-      operationId: setMyUserName
+      operationId: setMyUsername
       summary: changes the username of the authenticated user 
       description: this operation updates the username of authenticated user
       requestBody:
