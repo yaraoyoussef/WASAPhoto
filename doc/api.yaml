@@ -319,7 +319,7 @@ components:
       description: username of user 
       type: object
       properties:
-        username:
+        inputString:
           description: string between 5 and 15 characters
           type: string 
           pattern: '^([a-z0-9._-])\w+$'
@@ -331,7 +331,7 @@ components:
       description: id of user 
       type: object
       properties:
-        userId:
+        generatedId:
           description: string between 5 and 15 characters
           type: string 
           pattern: '^([a-z0-9._-])\w+$'
@@ -362,7 +362,6 @@ components:
           type: number
           example: 10097
         owner:
-          description: id of user that uploaded the photo
           $ref: "#/components/schemas/UserId"
         likes:
           description: represents the lits of likes on a given photo

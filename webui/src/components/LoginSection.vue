@@ -3,7 +3,7 @@
       <div class="login-section screen">
         <div class="padding">
           <div class="login-form">
-            <img class="logo-frame" src="https://anima-uploads.s3.amazonaws.com/releases/645a175ad9b92dc7038c3bb/img/logo-frame.svg" alt="Logo_Frame">
+            <img class="logo-frame" src="https://anima-uploads.s3.amazonaws.com/releases/645a175ad9b92dc7038c3bb/img/logo-frame.svg" alt="Logo_Frame" />
             <div class="login-wrapper">
               <div class="input-fields">
                 <username :usernameEmail="username1Props.usernameEmail" />
