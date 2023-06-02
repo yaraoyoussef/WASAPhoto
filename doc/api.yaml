@@ -120,7 +120,7 @@ paths:
         "404": { description: user not found }
         "401": { description: operation unauthorized }
         "500": { description: failed to unfollow this user }
-  /users/{id}/banned/{otherUserId}:
+  /users/{id}/ban/{otherUserId}:
     parameters:
       - $ref: "#/components/parameters/Id"
       - $ref: "#/components/parameters/OtherUserId"
