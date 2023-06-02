@@ -8,6 +8,8 @@ import NotFound from './components/NotFound.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
+import '@fortawesome/fontawesome-free/css/all.css';
+
 
 const app = createApp(App)
 app.config.globalProperties.$axios = axios;

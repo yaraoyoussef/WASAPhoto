@@ -68,7 +68,7 @@ paths:
         "403": { description: Username already in use }
         "401": { description: operation unauthorized }
         "500": { description: an error occured please try again later }
-  /users/{id}/home/:
+  /users/{id}/home:
     parameters:
       - $ref: "#/components/parameters/Id"
     get:
