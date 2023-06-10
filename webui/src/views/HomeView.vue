@@ -30,6 +30,24 @@ export default {
 				this.errormsg = e.toString()
 			}
 
+		},
+
+		async upload() {
+			const input = document.getElementById('photo-input');
+			try {
+				const file = input.files[0];
+				const reader = new FileReader();
+				reader.readAsArrayBuffer(file);
+
+				let response = await this.$axios.post("users/"+this.$route.params.id+"/photos", reader.result, {
+					headers: {
+						'Content-Type': file.type
+					},
+				})
+
+			} catch(e) {
+				this.errormsg = e.toString()
+			}
 		}
 	},
 	mounted() {
@@ -43,6 +61,10 @@ export default {
 	<div class="container">
 		<div class="home-section screen">
             <h1 class="title">WASAPhoto</h1>
+            <div class="add-post-section">
+				<input type="file" id="photo-input" class="photo-input" accept=".png, .jpeg">
+            	<button @click="upload" class="uploader">Upload</button>
+            </div>
             <div class="photo-container">
                 <Photo 
                 v-for = "(photo, index) in photos"
@@ -75,6 +97,18 @@ export default {
     flex-direction: column;
     align-items: center;
     height: 100%;
+}
+.add-post-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.uploader {
+  font-size: 17px;
+}
+.photo-input {
+	font-size: 17px;
 }
 .photo-container {
     align-items: center;
