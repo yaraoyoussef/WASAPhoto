@@ -2,11 +2,68 @@
 export default {
     data() {
         return {
-            
+          photoSrc: "",
+          liked: false,
+          commentsList: [],
+          likesList: []
         }
     },
 
     props: ['owner', 'likes', 'comments', 'dateAndTime', 'photoId'],
+
+    methods: {
+      getPhoto() {
+        this.photoSrc = __API_URL__+"/users/"+this.owner+"/photos/"+this.photoId
+      },
+
+      async deletePhoto() {
+        try {
+          await this.$axios.delete("/users/"+this.owner+"/photos/"+this.photoId)
+          this.$emit("removePhoto", this.photoId)
+        } catch (e) {
+        }
+      }, 
+// missing functions
+      async changeLike() {
+        if(this.cUserIsOwner) {return }
+        const token = localStorage.getItem('token')
+        try {
+          if(!this.liked) {
+            await this.$axios.put("/users/"+this.owner+"/photos/"+this.photoId+"/likes/"+token)
+            this.likesList.push({
+              userId: token,
+              username: token
+            })
+          } else {
+            await this.$axios.delete("/users/"+this.owner+"/photos/"+this.photoId+"/likes/"+token)
+            this.likesList.pop()
+          }
+          this.liked = !this.liked;
+        } catch (e) {}
+      },
+      
+      deleteComment(val) {
+        this.commentsList = this.commentsList.filter(item => item.commentId !== val)
+      },
+
+      addComment(comment) {
+        this.commentsList.push(comment)
+      }
+    },
+
+    async mounted() {
+      await this.getPhoto()
+      if(this.likes != null) {
+        this.likesList = this.likes
+      }
+      // set liked to true if current user already liked the loaded picture
+      if(this.likes != null) {
+        this.liked = this.likesList.some(o => o.userId === localStorage.getItem('token'))
+      }
+      if(this.comments != null) {
+        this.commentsList = this.comments
+      }
+    }
 }
 </script>
 
@@ -30,7 +87,7 @@ export default {
               <i @click="changeLike" :class="'like '+(liked? 'fas fa-heart': 'far fa-heart')" ></i>
             </button>
             <button class="comment-btn">
-              <i @click="commentPhoto" class="comment far fa-comment"></i>
+              <i @click="addComment" class="comment far fa-comment"></i>
             </button>
             <h2 class="upload-info">Uploaded on {{ dateAndTime }}</h2>
           </div>
