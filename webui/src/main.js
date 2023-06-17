@@ -6,14 +6,14 @@ import ErrorMsg from './components/ErrorMsg.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 import NotFound from './components/NotFound.vue'
 import Photo from './components/Photo.vue'
-import CommentOnPost from './CommentOnPost.vue'
-import CommentModal from './CommentModal.vue'
-import User from './User.vue'
-import SideBar from './SideBar.vue'
+import CommentOnPost from './components/CommentOnPost.vue'
+import CommentModal from './components/CommentModal.vue'
+import User from './components/User.vue'
+import SideBar from './components/SideBar.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
-import '@fortawesome/fontawesome-free/css/all.css';
+//import '@fortawesome/fontawesome-free/css/all.css';
 
 
 const app = createApp(App)
