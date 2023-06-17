@@ -6,6 +6,8 @@ import ErrorMsg from './components/ErrorMsg.vue'
 import LoadingSpinner from './components/LoadingSpinner.vue'
 import NotFound from './components/NotFound.vue'
 import Photo from './components/Photo.vue'
+import CommentOnPost from './CommentOnPost.vue'
+import CommentModal from './CommentModal.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
@@ -18,5 +20,7 @@ app.component("ErrorMsg", ErrorMsg);
 app.component("LoadingSpinner", LoadingSpinner);
 app.component("NotFound", NotFound);
 app.component("Photo", Photo)
+app.component("CommentOnPost", CommentOnPost)
+app.component("CommentModal", CommentModal)
 app.use(router)
 app.mount('#app')

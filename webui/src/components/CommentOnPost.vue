@@ -10,7 +10,7 @@ export default {
         async deleteComment() {
             try {
                 await this.$axios.delete("/users/"+this.owner+"/photos/"+this.photoId+"/comments/"+this.commentId)
-                this.$emit('deleteComment', this.commentId)
+                this.$emit('removeComment', this.commentId)
             } catch(e) {
                 console.log(e.toString())
             }
