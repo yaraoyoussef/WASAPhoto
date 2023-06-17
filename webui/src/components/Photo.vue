@@ -122,6 +122,10 @@ export default {
   border-color: transparent;
   font-size: 20px;
 }
+.delete-photo:hover {
+  color: red;
+  transform: scale(1.1);
+}
 .delete-icon {
   font-size: 15px;
 }
