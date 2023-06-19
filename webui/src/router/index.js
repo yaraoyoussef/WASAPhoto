@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import NotFound from '../views/NotFound.vue'
 import Profile from '../views/Profile.vue'
+import Search from '../views/Search.view'
 
 const router = createRouter({
 	history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,10 @@ const router = createRouter({
 		{
 			path: '/users/:id', 
 			component: Profile
+		},
+		{
+			path: '/search',
+			component: Search
 		},
 		{
 			path: '/:catchAll(.*)',
