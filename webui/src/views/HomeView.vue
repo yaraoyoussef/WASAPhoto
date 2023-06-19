@@ -7,18 +7,6 @@ export default {
 		}
 	},
 	methods: {
-		async refresh() {
-			this.loading = true;
-			this.errormsg = null;
-			try {
-				let response = await this.$axios.get("/");
-				this.some_data = response.data;
-			} catch (e) {
-				this.errormsg = e.toString();
-			}
-			this.loading = false;
-		},
-
 		async load() {
 			try {
 				this.errormsg = null;
@@ -39,11 +27,13 @@ export default {
 				const reader = new FileReader();
 				reader.readAsArrayBuffer(file);
 
-				let response = await this.$axios.post("users/"+this.$route.params.id+"/photos", reader.result, {
-					headers: {
-						'Content-Type': file.type
-					},
-				})
+				reader.onload = async () => {
+					let response = await this.$axios.post("users/"+this.$route.params.id+"/photos", reader.result, {
+						headers: {
+							'Content-Type': file.type
+						},
+					}) 
+				}
 
 			} catch(e) {
 				this.errormsg = e.toString()
@@ -52,7 +42,7 @@ export default {
 	},
 	mounted() {
 		this.load()
-		this.refresh()
+		this.upload()
 	}
 }
 </script>
@@ -73,7 +63,7 @@ export default {
                 :photo_id="photo.photoId"
                 :comments="photo.comments != nil ? photo.comments : []"
                 :likes="photo.likes != nil ? photo.likes : []"
-                :date="photo.date"
+                :dateAndTime="photo.dateAndTime"
                 />
             </div>
             <div v-if="photos.length==0" class="empty-container">

@@ -102,13 +102,17 @@ export default {
         this.photos = this.photos.filter(item => item.photoId !== photoId)
       },
 
-      editUsername() {
-        // idk what to write here
+      async editUsername() {
+        try {
+          let response = this.$axios.put("/users/"+this.$route.params.id, {username: this.username})
+          this.username = ""
+        } catch(e) {
+          this.errMsg = e.toString();
+        }
       },
 
-      logout() {
-        this.$router.push("/session")
-        // clear the session 
+      goHome() {
+        this.$router.replace("/home")
       },
 
       async mounted() {
@@ -121,17 +125,17 @@ export default {
 <template>
     <div class="container-fluid" v-if="!cUserBanned && exists">
         <div class="pre-page">
-          <h1 class="username">{{ username }}</h1>
-          <button class="exit">
+          <h1 class="username">{{username}}</h1>
+          <button class="exit" @click="goHome">
             <i class="exit-icon fas fa-xmark"></i>
           </button>
         </div>
         <div class="page-head">
-          <h2 class="element">Posts: {{ nPosts }}</h2>
-          <h3 class="element">Followers: {{ nFollowers }}</h3>
-          <h4 class="element">Followings: {{ nFollowings }}</h4>
+          <h2 class="element">Posts: {{nPosts}}</h2>
+          <h3 class="element">Followers: {{nFollowers}}</h3>
+          <h4 class="element">Followings: {{nFollowings}}</h4>
           <button v-if="!cUser && !banned" @click="follow" class="element">
-              {{followState ? "Unfollow" : "Follow" }}
+              {{followState ? "Unfollow" : "Follow"}}
           </button>
           <button v-if="!cUser" @click="ban" class="element">
               {{banSate ? "Unban" : "Ban" }}
@@ -154,7 +158,7 @@ export default {
                 :photoId="photo.photoId"
                 :comments="photo.comments"
                 :likes="photo.likes"
-                :date="photo.dateAndTime"
+                :dateAndTime="photo.dateAndTime"
                 >
             </Photo>
             </div>

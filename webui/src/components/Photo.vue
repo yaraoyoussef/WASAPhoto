@@ -99,7 +99,7 @@ export default {
             <button class="comment-btn" data-bs-toggle="modal" :data-bs-target="'#commentModal'+photoId">
               <i @click="commentClick" class="comment far fa-comment"></i>
             </button>
-            <h2 class="upload-info">Uploaded on {{ dateAndTime }}</h2>
+            <h2 class="upload-info">Uploaded on {{dateAndTime}}</h2>
           </div>
         </div>
   </div>

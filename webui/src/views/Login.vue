@@ -2,7 +2,7 @@
 export default {
     data() {
       return {
-        username: "",
+        id: "",
         errMsg: null,
         disabled: true
       }
@@ -11,9 +11,10 @@ export default {
         async login() {
             this.errMsg = null
             try {
-                let response = await this.$axios.post("/session", {username: this.username.trim()});
-                localStorage.setItem('token', response.data.username)
-                this.$router.replace('users/{id}/home')
+                let response = await this.$axios.post("/session", {uid: this.id.trim()});
+                localStorage.setItem('token', response.data.uid)
+                this.$router.replace('/home')
+                this.$emit('updateLoggedChild', true)
             } catch (e) {
                 this.errMsg = e.toString()
             }
@@ -40,10 +41,10 @@ export default {
                 <input
                   type="text"
                   class="form-control"
-                  v-model="username"
+                  v-model="id"
                   minlength="5"
                   maxlength="15"
-                  placeholder="username"
+                  placeholder="enter an identifier"
                 />
               </div>
               <div class="login-button">
