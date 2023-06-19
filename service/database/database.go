@@ -62,6 +62,7 @@ type AppDatabase interface {
 	UncommentPhoto(string, int64, int64) error
 
 	// utils methods
+	SearchUsers(string, string) ([]User, error)
 	GetUsername(string) (string, error)
 	GetFollowers(string) ([]User, error)
 	GetFollowing(string) ([]User, error)

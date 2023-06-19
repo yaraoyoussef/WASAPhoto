@@ -43,8 +43,7 @@ export default {
     <div class="container-fluid">
         <User v-for="(user, index) in users"
         :key="index"
-        :id="user.userId"
-        :username="user.username"
+        :id="user.ID"
         @chosen="getProfile"
         />
         <p v-if="users.length==0" class="empty">No results</p>

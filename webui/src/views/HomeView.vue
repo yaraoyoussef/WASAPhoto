@@ -60,7 +60,7 @@ export default {
                 v-for = "(photo, index) in photos"
                 :key ="index"
                 :owner="photo.owner"
-                :photo_id="photo.photoId"
+                :photoId="photo.photoId"
                 :comments="photo.comments != nil ? photo.comments : []"
                 :likes="photo.likes != nil ? photo.likes : []"
                 :dateAndTime="photo.dateAndTime"

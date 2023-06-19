@@ -51,8 +51,8 @@ export default {
                     :key="index"
                     :author="comment.userId"
                     :commentId="comment.commentId"
-                    :photoId="comment.photoId"
-                    :content="comment.content"
+                    :photoId= "photoId"
+                    :content="comment.comment"
                     :owner="owner"
 
                     @removeComment="removeCommentParent"

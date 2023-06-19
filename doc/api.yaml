@@ -280,6 +280,30 @@ paths:
         "500": 
           description: | 
             an error occured, please retry later 
+  /users:
+    get:
+      tags:
+        - Search
+      security:
+        - bearerAuth: []
+      operationId: searchUsers
+      summary: searches for the specified user 
+      description: searches for the specified username or id in the users database
+      parameters:
+        - $ref: "#/components/parameters/SearchId"
+      responses:
+        "200":
+          description: users matching the searched username are fetched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersList"
+        "401": { description: operation not authorised }
+        "404": { description: not found }
+        "500":
+          description: |
+            an error occured, please retry later
+
 components:
   securitySchemes:
     bearerAuth:
@@ -413,6 +437,20 @@ components:
           items: { $ref: "#/components/schemas/Photo"}
           minItems: 0
           maxItems: 100000000000
+    UsersList:
+      description: list of users matching searched identifier
+      type: object
+      properties:
+        users:
+          description: array of user's ids
+          type: array
+          minItems: 0
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/UserId"
+          example: 
+            - ID: maria77
+            - ID: mario78
   parameters:
     Id:
       schema:
@@ -463,6 +501,18 @@ components:
       in: path
       required: true
       description: id of a comment
+    SearchId:
+      name: id
+      in: query
+      description: describes user we're searching for
+      schema:
+        description: id of user
+        type: string
+        pattern: '^([a-z0-9._-])\w+$'
+        minLength: 5
+        maxLength: 15
+        example: "maria77"
+      example: "maria77"
 tags:
   - name: Login 
     description: relating to login action to the platform
@@ -480,3 +530,5 @@ tags:
     description: for operations related to liking or unliking a photo
   - name: Comments 
     description: for operations related to commenting or uncommenting a photo
+  - name: Search
+    description: for searching the database 

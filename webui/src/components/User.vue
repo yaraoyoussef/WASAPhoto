@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['id', 'username'],
+    props: ['id'],
     methods: {
         chosen() {
             this.$emit('chosen', this.id)
@@ -15,7 +15,7 @@ export default {
             <div class="card-container">
                 <div class="user-card border-start">
                     <div class="card-body">
-                        <h5 @click="clickedUser" class="user-card-title">{{username}} @{{id}}</h5>
+                        <h5 @click="clickedUser" class="user-card-title">@{{id}}</h5>
                     </div>
                 </div>
             </div>
