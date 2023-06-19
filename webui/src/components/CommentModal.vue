@@ -19,7 +19,6 @@ export default {
                 });
                 this.$emit("addComment", {
                     commentId: response.data.commentId,
-                    //photoId: this.photoId,
                     userId: localStorage.getItem("token"),
                     comment: this.commentTxt
                 });

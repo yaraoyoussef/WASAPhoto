@@ -87,7 +87,7 @@ export default {
           this.username = response.data.username
           this.nFollowers = response.data.followers != null ? response.data.followers.length : 0
           this.nFollowings = response.data.followings != null ? response.data.followings.length : 0
-          this.nPosts = response.data.photos != null ? response.data.photos.length : 0
+          this.nPosts = response.data.posts
           this.photos = response.data.photos != null ? response.data.photos : []
           this.followers = response.data.followers != null ? response.data.followers : []
           this.followings = response.data.followings != null ? response.data.followings : []
