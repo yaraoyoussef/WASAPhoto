@@ -10,6 +10,7 @@ export default {
         async addComment() {
             try {
                 let response = await this.$axios.post("/users/" + this.owner + "/photos/" + this.photoId + "/comments", {
+                    commentId: -1,
                     userId: localStorage.getItem("token"),
                     comment: this.commentTxt
                 }, { headers: {
@@ -18,7 +19,7 @@ export default {
                 });
                 this.$emit("addComment", {
                     commentId: response.data.commentId,
-                    photoId: this.photoId,
+                    //photoId: this.photoId,
                     userId: localStorage.getItem("token"),
                     comment: this.commentTxt
                 });
@@ -35,7 +36,6 @@ export default {
             this.$emit("addComment", newFormattedComment);
         }
     },
-    components: { CommentOnPost }
 }
 </script>
 

@@ -11,8 +11,8 @@ export default {
         async login() {
             this.errMsg = null
             try {
-                let response = await this.$axios.post("/session", {uid: this.id.trim()});
-                localStorage.setItem('token', response.data.uid)
+                let response = await this.$axios.post("/session", {ID: this.id.trim()});
+                localStorage.setItem('token', response.data.ID)
                 this.$router.replace('/home')
                 this.$emit('updateLoggedChild', true)
             } catch (e) {

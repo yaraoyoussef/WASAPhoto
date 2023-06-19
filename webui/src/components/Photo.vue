@@ -9,7 +9,7 @@ export default {
             likesList: []
         };
     },
-    props: ["owner", "likes", "comments", "dateAndTime", "photoId"],
+    props: ["owner", "likes", "comments", "dateAndTime", "photoId","cUserIsOwner"],
     methods: {
       // commentClick ??
         getPhoto() {
@@ -66,7 +66,6 @@ export default {
             this.commentsList = this.comments;
         }
     },
-    components: { CommentModal }
 }
 </script>
 

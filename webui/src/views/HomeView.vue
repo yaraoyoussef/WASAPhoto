@@ -10,7 +10,7 @@ export default {
 		async load() {
 			try {
 				this.errormsg = null;
-				let response = await this.$axios.get('/users/' + localStorage.getItem('id') + '/home')
+				let response = await this.$axios.get('/users/' + localStorage.getItem('token') + '/home')
 				if (response.data != null) {
 					this.photos = response.data
 				}
@@ -28,7 +28,7 @@ export default {
 				reader.readAsArrayBuffer(file);
 
 				reader.onload = async () => {
-					let response = await this.$axios.post("users/"+this.$route.params.id+"/photos", reader.result, {
+					let response = await this.$axios.post("/users/"+this.$route.params.id+"/photos/", reader.result, {
 						headers: {
 							'Content-Type': file.type
 						},

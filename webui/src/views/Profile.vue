@@ -40,10 +40,10 @@ export default {
       async follow(){
         try {
           if(this.followState) {
-            await this.$axios.delete("/users/"+localStorage.getItem('token')+"follow/"+this.$route.params.otherUserId);
+            await this.$axios.delete("/users/"+localStorage.getItem('token')+"/follow/"+this.$route.params.id);
             this.nFollowings -=1
           } else {
-            await this.$axios.put("/users/"+localStorage.getItem('token')+"follow/"+this.$route.params.otherUserId);
+            await this.$axios.put("/users/"+localStorage.getItem('token')+"/follow/"+this.$route.params.id);
             this.nFollowings +=1
           }
           this.followState = !this.followState
@@ -55,9 +55,9 @@ export default {
       async ban() {
         try {
           if(this.banSate) {
-            await this.$axios.delete("/users/"+localStorage.getItem('token')+"ban/"+this.$route.params.otherUserId);
+            await this.$axios.delete("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
           } else {
-            await this.$axios.put("/users/"+localStorage.getItem('token')+"ban/"+this.$route.params.otherUserId);
+            await this.$axios.put("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
             this.followState = false
           }
           this.banSate = !this.banSate
@@ -159,6 +159,8 @@ export default {
                 :comments="photo.comments"
                 :likes="photo.likes"
                 :dateAndTime="photo.dateAndTime"
+                :cUserIsOwner="cUser"
+                @deletePhoto="deletePhoto"
                 >
             </Photo>
             </div>
