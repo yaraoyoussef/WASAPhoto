@@ -12,6 +12,7 @@ export default {
         },
 
         myProfile() {
+            console.log(localStorage.getItem('token'), " in sidebar")
             this.$emit('updateView', "/users/"+localStorage.getItem('token'))
         },
 
