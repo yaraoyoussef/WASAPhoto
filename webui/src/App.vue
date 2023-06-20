@@ -26,6 +26,12 @@ export default {
 		}
 	},
 
+	computed: {
+		showSideBar() {
+			return this.$route.path!=='/login';
+		}
+	},
+
 	created() {
 		if(!localStorage.getItem('notFirstStart')) {
 			localStorage.clear()
@@ -45,12 +51,12 @@ export default {
 
 <template>
 	<div class="container">
-		<SideBar v-if="loggedIn"
+		<SideBar v-if="loggedIn && showSideBar"
 		@logoutSidebar="logout"
 		@updateView="updateView"
 		@searchUsers="search"
 		/>
-		<div class="main-content">
+		<div :class=" { 'main-content': showSideBar, 'main-content-full': !showSideBar }">
 			<RouterView 
 			@updateLoggedChild="updateLogged"
 			@updateView="updateView"
@@ -67,6 +73,9 @@ export default {
 .main-content {
 	flex-grow: 1;
 	margin-left: 250px;
+}
+.main-content-full {
+	width: 100%;
 }
 </style>
   
