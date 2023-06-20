@@ -170,7 +170,7 @@ export default {
             </div>
         </div>
         <div class="err-container">
-          <ErrMsg v-if="errMsg" :msg="errMsg"></ErrMsg>
+          <ErrorMsg v-if="errMsg" :msg="errMsg"></ErrorMsg>
         </div>
     </div>
     <div v-else class="otherPage">

@@ -28,7 +28,7 @@ export default {
 				reader.readAsArrayBuffer(file);
 
 				reader.onload = async () => {
-					let response = await this.$axios.post("/users/"+this.$route.params.id+"/photos/", reader.result, {
+					let response = await this.$axios.post("/users/"+localStorage.getItem('token')+"/photos/", reader.result, {
 						headers: {
 							'Content-Type': file.type
 						},
@@ -89,7 +89,7 @@ export default {
 .add-post-section {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 .uploader {

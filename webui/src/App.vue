@@ -18,7 +18,6 @@ export default {
 			this.loggedIn = val
 		},
 		updateView(otherView) {
-			console.log("updateView func in app.vue")
 			this.$router.replace(otherView)
 		},
 		search(val) {
