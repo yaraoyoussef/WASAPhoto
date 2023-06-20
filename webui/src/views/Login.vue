@@ -48,7 +48,7 @@ export default {
                 />
               </div>
               <div class="login-button">
-                <button class="login-btn" :disabled="id==null || id.trim().length < 5">
+                <button class="login-btn" :disabled="id === null || id.trim().length < 5" @click="login">
                   Register / Login
               </button>
               </div>
