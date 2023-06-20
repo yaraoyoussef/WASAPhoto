@@ -11,16 +11,12 @@ export default {
         async login() {
             this.errormsg = null
             try {
-              console.log("login func has been reached")
               let response = await this.$axios.post("/session", {ID: this.id.trim()});
-              console.log("backend code has been executed")
               localStorage.setItem('token', response.data.ID)
               this.$router.replace('/home')
               this.$emit('updateLoggedChild', true)
-              console.log("done without errors")
             } catch (e) {
                 this.errormsg = e.toString()
-                console.log("error")
             }
         },
     },
