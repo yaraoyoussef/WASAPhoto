@@ -3,13 +3,13 @@ export default {
     data() {
       return {
         id: "",
-        errMsg: null,
+        errormsg: null,
         disabled: true
       }
     },
     methods: {
         async login() {
-            this.errMsg = null
+            this.errormsg = null
             try {
               console.log("login func has been reached")
               let response = await this.$axios.post("/session", {ID: this.id.trim()});
@@ -19,7 +19,7 @@ export default {
               this.$emit('updateLoggedChild', true)
               console.log("done without errors")
             } catch (e) {
-                this.errMsg = e.toString()
+                this.errormsg = e.toString()
                 console.log("error")
             }
         },
@@ -59,7 +59,7 @@ export default {
             </div>
           </div>
           <div class="err-container">
-                <ErrMsg class="err-txt" v-if="errMsg" :msg="errMsg"></ErrMsg>
+                <ErrorMsg class="err-txt" v-if="errormsg" :msg="errormsg"></ErrorMsg>
           </div>
         </div>
       </form>
