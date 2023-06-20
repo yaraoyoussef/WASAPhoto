@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import NotFound from '../views/NotFound.vue'
 import Profile from '../views/Profile.vue'
-import Search from '../views/Search.view'
+import Search from '../views/Search.vue'
 
 const router = createRouter({
 	history: createWebHashHistory(import.meta.env.BASE_URL),
