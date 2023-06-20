@@ -44,22 +44,30 @@ export default {
 </script>
 
 <template>
-	<div>
+	<div class="container">
 		<SideBar v-if="loggedIn"
 		@logoutSidebar="logout"
 		@updateView="updateView"
 		@searchUsers="search"
 		/>
-
-		<RouterView 
-		@updateLoggedChild="updateLogged"
-		@updateView="updateView"
-		:searchValue="searchValue"
-		/>
+		<div class="main-content">
+			<RouterView 
+			@updateLoggedChild="updateLogged"
+			@updateView="updateView"
+			:searchValue="searchValue"
+			/>
+		</div>
 	</div>
 </template>
   
 <style>
+.container {
+	display: flex;
+}
+.main-content {
+	flex-grow: 1;
+	margin-left: 250px;
+}
 </style>
   
   
