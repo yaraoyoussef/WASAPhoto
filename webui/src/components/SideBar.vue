@@ -12,6 +12,7 @@ export default {
         },
 
         myProfile() {
+            console.log("myProfile func in sidebar.vue")
             this.$emit('updateView', "/users/"+this.localStorage.getItem('token'))
         },
 

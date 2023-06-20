@@ -116,6 +116,7 @@ export default {
       },
 
       async mounted() {
+        console.log("mounting profile")
         await this.loadInfo()
       }
     }

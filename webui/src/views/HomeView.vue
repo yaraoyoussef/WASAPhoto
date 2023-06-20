@@ -49,7 +49,6 @@ export default {
 <template>
 	<div class="container">
 		<div class="home-section screen">
-            <h1 class="title">WASAPhoto</h1>
             <div class="add-post-section">
 				<input type="file" id="photo-input" class="photo-input" accept=".png, .jpeg">
             	<button @click="upload" class="uploader">Upload</button>
@@ -110,6 +109,7 @@ export default {
     text-align: center;
     flex-direction: column;
 	font-size: 30px;
+	font-style: italic;
 	color: black;
 }
 .err-container {
