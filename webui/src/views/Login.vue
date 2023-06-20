@@ -66,7 +66,6 @@ export default {
 <style>
 .login-section {
     text-align: center;
-    background-color: rgba(244, 238, 238, 0.919);
     display: flex;
     flex-direction: column;
     align-items: center;

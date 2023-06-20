@@ -76,7 +76,6 @@ export default {
 }
 .main-content-full {
 	width: 100%;
-	background-color: rgba(244, 238, 238, 0.919);
 }
 </style>
   
