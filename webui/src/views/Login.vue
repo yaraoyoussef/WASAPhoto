@@ -11,12 +11,16 @@ export default {
         async login() {
             this.errMsg = null
             try {
-                let response = await this.$axios.post("/session", {ID: this.id.trim()});
-                localStorage.setItem('token', response.data.ID)
-                this.$router.replace('/home')
-                this.$emit('updateLoggedChild', true)
+              console.log("login func has been reached")
+              let response = await this.$axios.post("/session", {ID: this.id.trim()});
+              console.log("backend code has been executed")
+              localStorage.setItem('token', response.data.ID)
+              this.$router.replace('/home')
+              this.$emit('updateLoggedChild', true)
+              console.log("done without errors")
             } catch (e) {
                 this.errMsg = e.toString()
+                console.log("error")
             }
         },
     },
@@ -48,7 +52,7 @@ export default {
                 />
               </div>
               <div class="login-button">
-                <button class="login-btn" :disabled="id === null || id.trim().length < 5" @click="login">
+                <button class="login-btn" :disabled="id == null || id.trim().length < 5">
                   Register / Login
               </button>
               </div>
