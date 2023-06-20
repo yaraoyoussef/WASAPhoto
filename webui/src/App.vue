@@ -18,11 +18,10 @@ export default {
 			this.loggedIn = val
 		},
 		updateView(otherView) {
-			console.log("in the app replacing route")
 			this.$router.replace(otherView)
-			console.log("route replaced")
 		},
 		search(val) {
+			console.log("going to search")
 			this.searchValue = val
 			this.$router.replace("/search")
 		}

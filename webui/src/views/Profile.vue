@@ -114,12 +114,12 @@ export default {
       goHome() {
         this.$router.replace("/home")
       },
+    },
 
-      async mounted() {
+    async mounted() {
         console.log("mounting profile")
         await this.loadInfo()
       }
-    }
 };
 </script>
 

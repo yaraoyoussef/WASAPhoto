@@ -12,8 +12,7 @@ export default {
         },
 
         myProfile() {
-            console.log(localStorage.getItem('token'), " in sidebar")
-            this.$emit('updateView', "/users/"+localStorage.getItem('token'))
+            this.$emit('updateView', "/users/"+localStorage.getItem('token').trim())
         },
 
         feed() {
@@ -21,6 +20,7 @@ export default {
         },
 
         search() {
+            console.log("text in sidebar: ", this.text)
             this.$emit('searchUsers', this.text)
             this.text = ""
         }
