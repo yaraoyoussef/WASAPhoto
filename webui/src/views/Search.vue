@@ -22,6 +22,7 @@ export default {
             try {
                 console.log("we have this search value: ", this.searchValue)
                 let response = await this.$axios.get("/users", {params: {id: this.searchValue}});
+                console.log(response.data)
                 this.users = response.data
             } catch (e) {
                 this.errMsg = e.toString();
@@ -36,7 +37,7 @@ export default {
         if(!localStorage.getItem('token')) {
             this.$router.replace("/login")
         }
-        console.log("about to load users")
+        console.log("about to load users in search.vue")
         await this.loadUsers()
     }
 }

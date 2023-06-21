@@ -11,7 +11,7 @@ import (
 func (rt *_router) searchUsers(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// req user
-	userReq := extractBearer(r.Header.Get("Authentication"))
+	userReq := extractBearer(r.Header.Get("Authorization"))
 	if userReq == "" {
 		w.WriteHeader(http.StatusForbidden)
 		return
@@ -26,6 +26,7 @@ func (rt *_router) searchUsers(w http.ResponseWriter, r *http.Request, ps httpro
 		_ = json.NewEncoder(w).Encode([]User{})
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(res)
 }
