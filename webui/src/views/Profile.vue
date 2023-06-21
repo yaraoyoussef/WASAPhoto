@@ -161,7 +161,7 @@ export default {
             <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
                 <Photo v-for="(photo, index) in photos"
                 :key="index"
-                :owner="this.$router.params.id"
+                :owner="this.$route.params.id"
                 :photoId="photo.photoId"
                 :comments="photo.comments"
                 :likes="photo.likes"
