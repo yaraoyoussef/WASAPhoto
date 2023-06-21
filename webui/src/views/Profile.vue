@@ -148,23 +148,24 @@ export default {
         <h5 class="post-title">Posts</h5>     
         <hr class="hr">
         <div class="posts-section">
-          <div class="row">
-            <div v-if="!cUserBanned && nPosts > 0" class="col-md-6">
-                <Photo v-for="(photo, index) in photos"
-                :key="index"
-                :owner="this.$route.params.id"
-                :photoId="photo.photoId"
-                :comments="photo.comments"
-                :likes="photo.likes"
-                :dateAndTime="photo.dateAndTime"
-                :cUserIsOwner="cUser"
-                @deletePhoto="deletePhoto"
-                />
+            <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
+              <div class="row">
+                <div v-for="(photo, index) in photos" :key="index" class="col-md-6">
+                  <Photo
+                  :owner="this.$route.params.id"
+                  :photoId="photo.photoId"
+                  :comments="photo.comments"
+                  :likes="photo.likes"
+                  :dateAndTime="photo.dateAndTime"
+                  :cUserIsOwner="cUser"
+                  @deletePhoto="deletePhoto"
+                  />
+                </div>
+              </div>
             </div>
             <div v-else class="empty-container">
                 <h6 class="empty">No Posts</h6>
             </div>
-          </div>
         </div>
         <div class="err-container">
           <ErrorMsg v-if="errMsg" :msg="errMsg"></ErrorMsg>
