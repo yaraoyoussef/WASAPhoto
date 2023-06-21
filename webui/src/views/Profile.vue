@@ -41,10 +41,10 @@ export default {
         try {
           if(this.followState) {
             await this.$axios.delete("/users/"+localStorage.getItem('token')+"/follow/"+this.$route.params.id);
-            this.nFollowings -=1
+            this.nFollowers -=1
           } else {
             await this.$axios.put("/users/"+localStorage.getItem('token')+"/follow/"+this.$route.params.id);
-            this.nFollowings +=1
+            this.nFollowers +=1
           }
           this.followState = !this.followState
         } catch(e) {
@@ -86,12 +86,12 @@ export default {
           }
           this.username = response.data.username
           this.nFollowers = response.data.followers != null ? response.data.followers.length : 0
-          this.nFollowings = response.data.followings != null ? response.data.followings.length : 
+          this.nFollowings = response.data.following != null ? response.data.following.length : 0
           this.nPosts = response.data.posts
           this.photos = response.data.photos != null ? response.data.photos : []
           this.followers = response.data.followers != null ? response.data.followers : []
-          this.followings = response.data.followings != null ? response.data.followings : []
-          this.followState = response.data.followers != null ? response.data.followers.find(obj => obj.id === localStorage.getItem('token')) : false
+          this.followings = response.data.following != null ? response.data.following : []
+          this.followState = response.data.followers != null ? response.data.followers.find(obj => obj.ID === localStorage.getItem('token')) : false
         } catch(e) {
           this.cUserBanned = true
         }
@@ -99,6 +99,7 @@ export default {
 
       deletePhoto(photoId) {
         this.photos = this.photos.filter(item => item.photoId !== photoId)
+        this.nPosts-=1
       },
 
       async editUsername() {
@@ -149,19 +150,16 @@ export default {
         <hr class="hr">
         <div class="posts-section">
             <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
-              <div class="row">
-                <div v-for="(photo, index) in photos" :key="index" class="col-md-6">
-                  <Photo
-                  :owner="this.$route.params.id"
-                  :photoId="photo.photoId"
-                  :comments="photo.comments"
-                  :likes="photo.likes"
-                  :dateAndTime="photo.dateAndTime"
-                  :cUserIsOwner="cUser"
-                  @deletePhoto="deletePhoto"
-                  />
-                </div>
-              </div>
+                <Photo v-for="(photo, index) in photos"
+                :key="index"
+                :owner="this.$route.params.id"
+                :photoId="photo.photoId"
+                :comments="photo.comments"
+                :likes="photo.likes"
+                :dateAndTime="photo.dateAndTime"
+                :cUserIsOwner="cUser"
+                @removePhoto="deletePhoto"
+                />
             </div>
             <div v-else class="empty-container">
                 <h6 class="empty">No Posts</h6>
