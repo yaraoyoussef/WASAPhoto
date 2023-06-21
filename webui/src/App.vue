@@ -21,7 +21,6 @@ export default {
 			this.$router.replace(otherView)
 		},
 		search(val) {
-			console.log("going to search")
 			this.searchValue = val
 			this.$router.replace("/search")
 		}

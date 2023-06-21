@@ -85,15 +85,21 @@ export default {
             this.exists = false
           }
           this.username = response.data.username
+          console.log("username" ,this.username)
           this.nFollowers = response.data.followers != null ? response.data.followers.length : 0
+          console.log("followers", this.nFollowers)
           this.nFollowings = response.data.followings != null ? response.data.followings.length : 0
+          console.log("followings", this.nFollowings)
           this.nPosts = response.data.posts
+          console.log("numb posts", this.nPosts)
           this.photos = response.data.photos != null ? response.data.photos : []
+          console.log("photos", this.photos)
           this.followers = response.data.followers != null ? response.data.followers : []
           this.followings = response.data.followings != null ? response.data.followings : []
           this.followState = response.data.followers != null ? response.data.followers.find(obj => obj.id === localStorage.getItem('token')) : false
-
+          console.log("in profile.vue loading the profile done without errors")
         } catch(e) {
+          console.log("user banned ", e.toString())
           this.cUserBanned = true
         }
       },

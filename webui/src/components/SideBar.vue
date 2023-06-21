@@ -20,7 +20,6 @@ export default {
         },
 
         search() {
-            console.log("text in sidebar: ", this.text)
             this.$emit('searchUsers', this.text)
             this.text = ""
         }
