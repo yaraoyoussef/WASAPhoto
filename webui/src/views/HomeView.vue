@@ -35,6 +35,8 @@ export default {
 					}) 
 				}
 
+				input.value = null;
+
 			} catch(e) {
 				this.errormsg = e.toString()
 			}

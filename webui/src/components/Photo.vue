@@ -110,7 +110,7 @@ export default {
 }
 .photo-container {
   justify-content: center;
-  width: 400px;
+  width: 300px;
 }
 .photo-head {
   display: flex;
@@ -129,7 +129,7 @@ export default {
   font-size: 15px;
 }
 .picture-space {
-  height: 400px;
+  height: 300px;
   justify-content: center;
 }
 .photo-bottom {
