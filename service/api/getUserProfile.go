@@ -39,6 +39,20 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
+	// check if requested user is banned by current user
+	rBanned, err := rt.db.CheckForBan(cUser, id)
+	// handle error
+	if err != nil {
+		ctx.Logger.WithError(err).Error("an error occured")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	// if requested user is banned, give partial content
+	if rBanned {
+		w.WriteHeader(http.StatusPartialContent)
+		return
+	}
+
 	// get profile from db
 	profile, err1 := rt.db.GetProfile(User{ID: id}.ToDatabase(), User{ID: cUser}.ToDatabase())
 	// error handling
