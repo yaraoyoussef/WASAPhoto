@@ -9,7 +9,7 @@ export default {
         username: "",
 
         followState: false,
-        banSate: false,
+        banState: false,
 
         nPosts: 0,
         nFollowers: 0,
@@ -54,13 +54,13 @@ export default {
 
       async ban() {
         try {
-          if(this.banSate) {
+          if(this.banState) {
             await this.$axios.delete("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
           } else {
             await this.$axios.put("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
             this.followState = false
           }
-          this.banSate = !this.banSate
+          this.banState = !this.banState
         } catch(e) {
           this.errMsg = e.toString();
         }
@@ -72,12 +72,12 @@ export default {
         }
         try {
           let response = await this.$axios.get("/users/"+this.$route.params.id);
-          this.banSate = false
+          this.banState = false
           this.exists = true
           this.cUserBanned = false
 
           if(response.status === 206) {
-            this.banSate = true
+            this.banState = true
             return
           }
 
@@ -135,11 +135,11 @@ export default {
           <h2 class="element">Posts: {{nPosts}}</h2>
           <h3 class="element">Followers: {{nFollowers}}</h3>
           <h4 class="element">Followings: {{nFollowings}}</h4>
-          <button v-if="!cUser && !banned" @click="follow" class="element">
+          <button v-if="!cUser && !banState" @click="follow" class="element">
               {{followState ? "Unfollow" : "Follow"}}
           </button>
           <button v-if="!cUser" @click="ban" class="element">
-              {{banSate ? "Unban" : "Ban" }}
+              {{banState ? "Unban" : "Ban" }}
           </button>
           <button v-else @click="editUsername" class="element">
               <i class="edit-icon fas fa-pen-to-square"></i> 
@@ -149,7 +149,7 @@ export default {
         <h5 class="post-title">Posts</h5>     
         <hr class="hr">
         <div class="posts-section">
-            <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
+            <div v-if="!banState && nPosts > 0" class="photo-container">
                 <Photo v-for="(photo, index) in photos"
                 :key="index"
                 :owner="this.$route.params.id"
