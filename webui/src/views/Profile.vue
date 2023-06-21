@@ -140,9 +140,6 @@ export default {
           <button v-if="!cUser" @click="ban" class="element">
               {{banSate ? "Unban" : "Ban" }}
           </button>
-          <button v-else @click="logout" class="element">
-            <i class="logout-icon fas fa-right-from-bracket"></i>
-          </button>
           <button v-else @click="editUsername" class="element">
               <i class="edit-icon fas fa-pen-to-square"></i> 
           </button>
@@ -150,7 +147,8 @@ export default {
         <hr class="hr">
         <h5 class="post-title">Posts</h5>     
         <hr class="hr">
-        <div class="posts-section">
+        <div class="row">
+          <div class="col">
             <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
                 <Photo v-for="(photo, index) in photos"
                 :key="index"
@@ -161,12 +159,12 @@ export default {
                 :dateAndTime="photo.dateAndTime"
                 :cUserIsOwner="cUser"
                 @deletePhoto="deletePhoto"
-                >
-            </Photo>
+                />
             </div>
             <div v-else class="empty-container">
                 <h6 class="empty">No Posts</h6>
             </div>
+          </div>
         </div>
         <div class="err-container">
           <ErrorMsg v-if="errMsg" :msg="errMsg"></ErrorMsg>
@@ -227,6 +225,7 @@ export default {
   flex-direction: column;
 	font-size: 30px;
 	color: black;
+  font-style: italic;
 }
 .err-container {
     align-items: center;
