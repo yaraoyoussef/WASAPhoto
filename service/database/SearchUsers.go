@@ -11,7 +11,8 @@ func (db *appdbimpl) SearchUsers(searching string, searchedFor string) ([]User, 
 	var res []User
 	for rows.Next() {
 		var user User
-		err = rows.Scan(&user.ID)
+		var username string
+		err = rows.Scan(&user.ID, &username)
 		if err != nil {
 			return nil, err
 		}
