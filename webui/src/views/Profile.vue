@@ -147,9 +147,9 @@ export default {
         <hr class="hr">
         <h5 class="post-title">Posts</h5>     
         <hr class="hr">
-        <div class="row">
-          <div class="col">
-            <div v-if="!cUserBanned && nPosts > 0" class="photo-container">
+        <div class="posts-section">
+          <div class="row">
+            <div v-if="!cUserBanned && nPosts > 0" class="col-md-6">
                 <Photo v-for="(photo, index) in photos"
                 :key="index"
                 :owner="this.$route.params.id"
@@ -225,7 +225,6 @@ export default {
   flex-direction: column;
 	font-size: 30px;
 	color: black;
-  font-style: italic;
 }
 .err-container {
     align-items: center;
