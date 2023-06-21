@@ -58,7 +58,13 @@ export default {
             await this.$axios.delete("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
           } else {
             await this.$axios.put("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
-            this.followState = false
+            if(this.followState) {
+              this.nFollowers-=1;
+            }
+            if (this.followings.find(obj => obj.ID === localStorage.getItem('token'))) {
+              this.nFollowings -= 1;
+            }
+            this.followState = false  
           }
           this.banState = !this.banState
         } catch(e) {
