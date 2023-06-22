@@ -159,6 +159,7 @@ export default {
         <hr class="hr">
         <div class="posts-section">
             <div v-if="!banState && nPosts > 0" class="photo-container">
+              <div class="photo-wrapper">
                 <Photo v-for="(photo, index) in photos"
                 :key="index"
                 :owner="this.$route.params.id"
@@ -169,6 +170,7 @@ export default {
                 :cUserIsOwner="cUser"
                 @removePhoto="deletePhoto"
                 />
+              </div>
             </div>
             <div v-else class="empty-container">
                 <h6 class="empty">No Posts</h6>
@@ -227,6 +229,12 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 20px;
 }
+.photo-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+}
+
 .empty {
   align-items: center;
   text-align: center;
