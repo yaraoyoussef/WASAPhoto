@@ -38,7 +38,7 @@ export default {
         </div>
         <div class="profile-section">
             <div class="profile-icon"> 
-                <i class="fas fa-user"></i>              
+                <i class="uuser fas fa-user"></i>              
             </div>
             <button @click="myProfile" type="button" class="profile-header">
                 My Profile
@@ -47,13 +47,13 @@ export default {
         <ul class="menu-list">
             <li>
                 <button type="button" @click="feed">
-                    <i class="fas fa-house"></i>
+                    <i class="fas fa-home"></i>
                     Feed
                 </button>
             </li>
             <li>
                 <button type="button" @click="logout">
-                    <i class="fas fa-right-from-bracket"></i>
+                    <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </button>
             </li>
@@ -108,6 +108,12 @@ body {
     background-color: gray;
     border-radius: 50%;
     margin-right: 10px;
+}
+
+.uuser {
+    font-size: 30px;
+    margin-left: 15px;
+    margin-top: 10px;
 }
 
 .profile-header {

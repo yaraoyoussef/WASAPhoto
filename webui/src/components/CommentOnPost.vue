@@ -29,7 +29,7 @@ export default {
             <div class="c-header">
                 <h5>@{{author}}</h5>
                 <button v-if="cUser === author || cUser === owner" class="del-btn" @click="deleteComment">
-                    <i class="x-icon fas fa-xmark"></i>
+                    <i class="x-icon fas fa-times"></i>
                 </button>
             </div>
             <div class="c-content">

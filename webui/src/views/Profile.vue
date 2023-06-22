@@ -137,7 +137,7 @@ export default {
         <div class="pre-page">
           <h1 class="username">{{username}}</h1>
           <button class="exit" @click="goHome">
-            <i class="exit-icon fas fa-xmark"></i>
+            <i class="exit-icon fas fa-times"></i>
           </button>
         </div>
         <div class="page-head">
@@ -151,7 +151,7 @@ export default {
               {{banState ? "Unban" : "Ban" }}
           </button>
           <button v-else data-bs-toggle="modal" :data-bs-target="'#usernameMod'" class="element">
-              <i class="edit-icon fas fa-pen-to-square"></i> 
+              <i class="edit-icon fas fa-pen-square"></i> 
           </button>
         </div>
         <hr class="hr">

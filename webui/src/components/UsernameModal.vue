@@ -59,9 +59,8 @@ export default {
 }
 .btn-close {
     position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 20px;
+    top: 10px;
+    right: 5px;
 }
 .modal-dialog {
     display: flex;
