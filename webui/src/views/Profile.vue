@@ -108,8 +108,13 @@ export default {
         this.nPosts-=1
       },
 
-      editUsername() {
-        console.log("works!!")
+      async editUsername(newUsername) {
+        try {
+          let response = this.$axios.put("/users/"+this.$route.params.id, {username: newUsername})
+          await this.loadInfo()
+        } catch (e) {
+          this.errMsg = e.toString()
+        }
       },
 
       goHome() {

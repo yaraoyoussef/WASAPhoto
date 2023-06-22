@@ -6,12 +6,12 @@ export default {
         }
     },
     methods: {
-        async edtiUsername() {
-            try {
-                let response = this.$axios.put("/users/"+this.$route.params.id, {username: this.username})
-                this.username = ""
-                this.closeModal()
-            } catch (e) {}
+        editUsername() {
+            if(this.username) {
+                this.$emit("editUsername", this.username);
+                this.username = "";
+                this.closeModal();
+            }
         },
 
         closeModal() {
@@ -43,7 +43,7 @@ export default {
                 <div class="modal-footer">
                     <div class="submit-btn">
                         <button type="button" class="btn btn-primary" 
-                        @click.prevent="edtiUsername"
+                        @click.prevent="editUsername"
                         :disabled="username===null || username.trim().length>15 || username.trim().length<3">
                         Save
                         </button>
