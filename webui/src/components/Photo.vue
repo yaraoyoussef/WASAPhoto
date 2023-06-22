@@ -11,9 +11,9 @@ export default {
     },
     props: ["owner", "likes", "comments", "dateAndTime", "photoId","cUserIsOwner"],
     methods: {
-      // commentClick ??
         getPhoto() {
-            this.photoSrc = __API_URL__ + "/users/" + this.owner + "/photos/" + this.photoId;
+          console.log(this.photoId)
+            this.photoSrc = __API_URL__ +"/users/"+this.owner+"/photos/"+this.photoId;
         },
         async deletePhoto() {
             try {
@@ -53,7 +53,7 @@ export default {
         }
     },
     async mounted() {
-        await this.getPhoto()
+        await this.getPhoto();
         if (this.likes != null) {
             this.likesList = this.likes;
         }
