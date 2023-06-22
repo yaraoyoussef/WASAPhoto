@@ -13,6 +13,7 @@ func (db *appdbimpl) GetProfile(user User, reqUser User) (Profile, error) {
 	}
 	photos, err := db.GetPhotos(reqUser.ID, user.ID)
 	if err != nil {
+		println("error in get photos", err)
 		return profile, err
 	}
 	username, err := db.GetUsername(user.ID)
@@ -109,6 +110,7 @@ func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 
 		comments, err := db.GetComments(reqUser, user, int64(photo.ID))
 		if err != nil {
+			println("error in get comments", err)
 			return nil, err
 		}
 		photo.Comments = comments
@@ -135,6 +137,7 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 		"AND userId NOT IN (SELECT userId FROM banned WHERE userId = ?)",
 		photo, reqUser, user, reqUser)
 	if err != nil {
+		println("getcomments function error:", err)
 		return nil, err
 	}
 
@@ -147,6 +150,7 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 		var comment Comment
 		err = rows.Scan(&comment.CommentId, &comment.UserId, &comment.Comment)
 		if err != nil {
+			println("error in scanning rows", err)
 			return nil, err
 		}
 
@@ -154,6 +158,7 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 	}
 
 	if rows.Err() != nil {
+		println("rows error", err)
 		return nil, err
 	}
 	return comments, nil

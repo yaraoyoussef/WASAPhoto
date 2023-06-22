@@ -31,6 +31,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	if err != nil {
 		ctx.Logger.WithError(err).Error("an error occured")
 		w.WriteHeader(http.StatusInternalServerError)
+		println("current is banned by other", err)
 		return
 	}
 	// if cUser is banned, do not allow retrieval
@@ -45,6 +46,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	if err != nil {
 		ctx.Logger.WithError(err).Error("an error occured")
 		w.WriteHeader(http.StatusInternalServerError)
+		println("other is banned by current", err)
 		return
 	}
 	// if requested user is banned, give partial content
@@ -59,6 +61,7 @@ func (rt *_router) getUserProfile(w http.ResponseWriter, r *http.Request, ps htt
 	if err1 != nil {
 		ctx.Logger.WithError(err).Error("error while executing request")
 		w.WriteHeader(http.StatusInternalServerError)
+		println("error n request", err)
 		return
 	}
 

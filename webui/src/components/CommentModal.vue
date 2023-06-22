@@ -41,7 +41,7 @@ export default {
 <template>
     <div class="modal fade my-modal" :id="modalId" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-cntnt">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="title" :id="modalId">Comments</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -62,8 +62,8 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="container">
-                                <textarea class="form-control" id="FormControlTextAera"
-                                placeholder="Add a comment" rows="1" maxlength="500" v-model="commentTxt"></textarea>
+                                <input class="form-control" type="text" id="FormControlTextAera"
+                                placeholder="Add a comment" maxlength="500" v-model="commentTxt">
                             </div>
                         </div>
                         <div class="submit-btn">
