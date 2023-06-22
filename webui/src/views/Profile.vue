@@ -132,7 +132,6 @@ export default {
 <template>
     <div class="container-fluid" v-if="!cUserBanned && exists">
       <UsernameModal :modalId="'usernameMod'"
-      :username="username"
       @editUsername="editUsername"
       />
         <div class="pre-page">
@@ -151,7 +150,7 @@ export default {
           <button v-if="!cUser" @click="ban" class="element">
               {{banState ? "Unban" : "Ban" }}
           </button>
-          <button v-else data-bs-toggle="modal" data-bs-target="#usernameMod" class="element">
+          <button v-else data-bs-toggle="modal" :data-bs-target="'#usernameMod'" class="element">
               <i class="edit-icon fas fa-pen-to-square"></i> 
           </button>
         </div>

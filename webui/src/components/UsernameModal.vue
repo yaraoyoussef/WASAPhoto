@@ -5,19 +5,15 @@ export default {
             username: "",
         }
     },
+    props:['modalId'],
+
     methods: {
         editUsername() {
             if(this.username) {
                 this.$emit("editUsername", this.username);
                 this.username = "";
-                this.closeModal();
             }
         },
-
-        closeModal() {
-            const modal = new bootstrap.Modal(document.getElementById("modalId"));
-            modal.hide();
-        }
     }
 }
 </script>
