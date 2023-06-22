@@ -51,21 +51,27 @@ export default {
 <template>
 	<div class="container">
 		<div class="home-section screen">
-            <div class="add-post-section">
-				<input type="file" id="photo-input" class="photo-input" accept=".png, .jpeg">
-            	<button @click="upload" class="uploader">Upload</button>
-            </div>
-            <div class="photo-container">
-                <Photo 
-                v-for = "(photo, index) in photos"
-                :key ="index"
-                :owner="photo.owner"
-                :photoId="photo.photoId"
-                :comments="photo.comments != nil ? photo.comments : []"
-                :likes="photo.likes != nil ? photo.likes : []"
-                :dateAndTime="photo.dateAndTime"
-                />
-            </div>
+			<div class="top-section">
+				<div class="add-post-container">
+					<div class="add-post-section">
+						<input type="file" id="photo-input" class="photo-input" accept=".png, .jpeg">
+						<button @click="upload" class="uploader">Upload</button>
+					</div>
+				</div>
+				<div class="photo-wrapper">
+					<div class="photo-container">
+						<Photo 
+						v-for = "(photo, index) in photos"
+						:key ="index"
+						:owner="photo.owner"
+						:photoId="photo.photoId"
+						:comments="photo.comments != nil ? photo.comments : []"
+						:likes="photo.likes != nil ? photo.likes : []"
+						:dateAndTime="photo.dateAndTime"
+						/>
+					</div>
+				</div>
+			</div>
             <div v-if="photos.length==0" class="empty-container">
                 <h2 class="empty">
                     No content, follow your friends to be able to view their newest posts
@@ -82,15 +88,11 @@ export default {
 .home-section {
 	background-color:white;
 }
-.title {
-    text-align: start;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
+.add-post-container {
+	display: flex;
+	justify-content: flex-end ;
 }
 .add-post-section {
-  display: flex;
-  justify-content: flex-end;
   margin-top: 10px;
   margin-bottom: 20px;
 }
@@ -99,6 +101,11 @@ export default {
 }
 .photo-input {
 	font-size: 17px;
+}
+.photo-wrapper {
+	display: flex;
+	justify-content: center;
+	margin-left: 200px;
 }
 .photo-container {
     align-items: center;

@@ -77,11 +77,9 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 50px;
-    height: 832px;
     justify-content: center;
     padding: 10px;
     position: relative;
-    width: 1280px;
 }
 .login-form {
     align-items: center;
@@ -93,6 +91,7 @@ export default {
     overflow: hidden;
     position: relative;
     width: fit-content;
+    margin-top: 70px;
 }
 
 .login-wrapper {

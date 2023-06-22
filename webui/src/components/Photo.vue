@@ -108,7 +108,7 @@ export default {
 }
 .photo-container {
   justify-content: center;
-  width: 300px;
+  width: 350px;
 }
 .photo-head {
   display: flex;
@@ -127,7 +127,7 @@ export default {
   font-size: 15px;
 }
 .picture-space {
-  height: 300px;
+  height: 350px;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -150,7 +150,7 @@ export default {
   font-size: 20px;
 }
 .upload-info {
-  margin-left: 100px;
+  margin-left: 90px;
   font-size: 15px;
 }
 </style>
