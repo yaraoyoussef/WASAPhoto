@@ -86,7 +86,7 @@ export default {
           </div>
           <hr>
           <div class="picture-space">
-            <img :src="photoSrc">
+            <img :src="photoSrc" class="photo-image">
           </div>
           <hr>
           <div class="photo-bottom">
@@ -129,6 +129,13 @@ export default {
 .picture-space {
   height: 300px;
   justify-content: center;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.photo-image {
+  max-width: 100%;
+  max-height: 100%;
 }
 .photo-bottom {
   display: flex;
