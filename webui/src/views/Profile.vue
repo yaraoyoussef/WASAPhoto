@@ -108,13 +108,8 @@ export default {
         this.nPosts-=1
       },
 
-      async editUsername() {
-        try {
-          let response = this.$axios.put("/users/"+this.$route.params.id, {username: this.username})
-          this.username = ""
-        } catch(e) {
-          this.errMsg = e.toString();
-        }
+      editUsername() {
+        console.log("works!!")
       },
 
       goHome() {
@@ -131,6 +126,10 @@ export default {
 
 <template>
     <div class="container-fluid" v-if="!cUserBanned && exists">
+      <UsernameModal :modalId="'usernameMod'"
+      :username="username"
+      @editUsername="editUsername"
+      />
         <div class="pre-page">
           <h1 class="username">{{username}}</h1>
           <button class="exit" @click="goHome">
@@ -147,9 +146,7 @@ export default {
           <button v-if="!cUser" @click="ban" class="element">
               {{banState ? "Unban" : "Ban" }}
           </button>
-          <input v-if="cUser" class="username-input" type="text" placeholder="new username" minlength="5" maxlength="15" v-model="username"> 
-          <button v-if="cUser" @click="editUsername" class="element"
-          :disabled="username===null || username.trim().length>15 || username.trim().length<3">
+          <button v-else data-bs-toggle="modal" data-bs-target="#usernameMod" class="element">
               <i class="edit-icon fas fa-pen-to-square"></i> 
           </button>
         </div>
