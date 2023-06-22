@@ -147,7 +147,9 @@ export default {
           <button v-if="!cUser" @click="ban" class="element">
               {{banState ? "Unban" : "Ban" }}
           </button>
-          <button v-else @click="editUsername" class="element">
+          <input v-if="cUser" class="username-input" type="text" placeholder="new username" minlength="5" maxlength="15" v-model="username"> 
+          <button v-if="cUser" @click="editUsername" class="element"
+          :disabled="username===null || username.trim().length>15 || username.trim().length<3">
               <i class="edit-icon fas fa-pen-to-square"></i> 
           </button>
         </div>
