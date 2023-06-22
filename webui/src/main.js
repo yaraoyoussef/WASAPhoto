@@ -10,6 +10,7 @@ import CommentOnPost from './components/CommentOnPost.vue'
 import CommentModal from './components/CommentModal.vue'
 import User from './components/User.vue'
 import SideBar from './components/SideBar.vue'
+import UsernameModal from './components/UsernameModal.vue'
 
 import './assets/dashboard.css'
 import './assets/main.css'
@@ -26,5 +27,6 @@ app.component("CommentOnPost", CommentOnPost)
 app.component("CommentModal", CommentModal)
 app.component("User", User)
 app.component("SideBar", SideBar)
+app.component("UsernameModal", UsernameModal)
 app.use(router)
 app.mount('#app')
