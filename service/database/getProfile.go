@@ -148,7 +148,8 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 	var comments []Comment
 	for rows.Next() {
 		var comment Comment
-		err = rows.Scan(&comment.CommentId, &comment.UserId, &comment.Comment)
+		var photoId int64
+		err = rows.Scan(&comment.CommentId, &photoId, &comment.UserId, &comment.Comment)
 		if err != nil {
 			println("error in scanning rows", err)
 			return nil, err
