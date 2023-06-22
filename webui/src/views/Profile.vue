@@ -223,9 +223,9 @@ export default {
   color: black;
 }
 .posts-section {
-  align-items: center;
-  text-align: center;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
 }
 .empty {
   align-items: center;
