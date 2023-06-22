@@ -34,8 +34,7 @@ export default {
                 if (!this.liked) {
                     await this.$axios.put("/users/" + this.owner + "/photos/" + this.photoId + "/likes/" + token);
                     this.likesList.push({
-                        userId: token,
-                        username: token
+                        ID: token,
                     });
                 }
                 else {
@@ -54,13 +53,13 @@ export default {
         }
     },
     async mounted() {
-        await this.getPhoto();
+        await this.getPhoto()
         if (this.likes != null) {
             this.likesList = this.likes;
         }
         // set liked to true if current user already liked the loaded picture
         if (this.likes != null) {
-            this.liked = this.likesList.some(o => o.userId === localStorage.getItem("token"));
+            this.liked = this.likesList.some(o => o.ID === localStorage.getItem("token"));
         }
         if (this.comments != null) {
             this.commentsList = this.comments;
