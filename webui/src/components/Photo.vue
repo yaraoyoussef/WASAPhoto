@@ -12,7 +12,6 @@ export default {
     props: ["owner", "likes", "comments", "dateAndTime", "photoId","cUserIsOwner"],
     methods: {
         getPhoto() {
-          console.log(this.photoId)
             this.photoSrc = __API_URL__ +"/users/"+this.owner+"/photos/"+this.photoId;
         },
         async deletePhoto() {

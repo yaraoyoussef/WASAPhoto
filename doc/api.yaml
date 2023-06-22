@@ -194,6 +194,20 @@ paths:
         "404": { description: error; photo not found }
         "401": { description: operation unauthorized }
         "500": { description: an error occured please try again later } 
+    get:
+      tags:
+        - Photos
+      security:
+        - bearerAuth: []
+      operationId: getPhoto
+      summary: gets a photo from its path
+      description: enables us to get photos of users
+      responses:
+        "200": { description: photo retrieved }
+        "401": { description: operation unauthorized }
+        "404": { description: photo not found }
+        "500": { description: an error occured please try again later }
+        
   /users/{id}/photos/{photoId}/likes/{otherUserId}:
     parameters:
       - $ref: "#/components/parameters/Id"
