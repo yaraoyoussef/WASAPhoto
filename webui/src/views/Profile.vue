@@ -227,17 +227,22 @@ export default {
 .posts-section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
+  grid-gap: 70px;
+  margin-left: 120px;
 }
 .photo-wrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
+  grid-gap: 70px;
 }
-
+.empty-container {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+}
 .empty {
   align-items: center;
-  text-align: center;
+  text-align: start;
   flex-direction: column;
 	font-size: 30px;
 	color: black;
