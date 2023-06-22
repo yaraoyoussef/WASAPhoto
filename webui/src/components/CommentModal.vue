@@ -51,7 +51,7 @@ export default {
                     :key="index"
                     :author="comment.userId"
                     :commentId="comment.commentId"
-                    :photoId= "photoId"
+                    :photoId= "this.photoId"
                     :content="comment.comment"
                     :owner="owner"
 
@@ -63,8 +63,7 @@ export default {
                         <div class="col">
                             <div class="container">
                                 <textarea class="form-control" id="FormControlTextAera"
-                                placeholder="Add a comment" rows="1" maxlength="500" v-model="commentTxt">
-                                </textarea>
+                                placeholder="Add a comment" rows="1" maxlength="500" v-model="commentTxt"></textarea>
                             </div>
                         </div>
                         <div class="submit-btn">

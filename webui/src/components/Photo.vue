@@ -95,7 +95,7 @@ export default {
               <i @click="changeLike" :class="'like '+(liked? 'fas fa-heart': 'far fa-heart')" ></i>
             </button>
             <button class="comment-btn" data-bs-toggle="modal" :data-bs-target="'#commentModal'+photoId">
-              <i @click="commentClick" class="comment far fa-comment"></i>
+              <i class="comment far fa-comment"></i>
             </button>
             <h2 class="upload-info">Uploaded on {{dateAndTime}}</h2>
           </div>
