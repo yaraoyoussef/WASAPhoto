@@ -36,7 +36,7 @@ export default {
 				}
 
 				if(file) {
-					showPopupMessage();
+					this.showPopupMessage();
 				}
 
 				input.value = null;
@@ -51,7 +51,6 @@ export default {
 			popup.style.display= "block";
 			setTimeout(function() {
 				popup.style.display = "none";}, 3000);
-
 		}
 	},
 	mounted() {
@@ -106,6 +105,10 @@ export default {
 .uploader {
   font-size: 17px;
 }
+.uploader:hover {
+	transform: scale(1.1);
+	background: rgb(143, 224, 150);
+}
 .photo-input {
 	font-size: 17px;
 }
@@ -113,9 +116,9 @@ export default {
 	display: none;
 	position: fixed;
 	top: 50%;
-	left: 50%;
+	left: 55%;
 	transform: translate(-50%, -50%);
-	background: #ffffff;
+	background: rgb(143, 224, 150);
 	padding: 20px;
 	border: 1px solid #cccccc;
 }

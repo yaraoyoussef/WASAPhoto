@@ -73,7 +73,7 @@ body {
     left: 0;
     width: 250px;
     bottom: 0;
-    background-color: #f1f1f1;
+    background-color: #8792f8;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -82,6 +82,9 @@ body {
 
 .title {
     font-size: 30px;
+    font-weight: bold;
+    margin-left: 35px;
+    margin-bottom: 20px;
 }
 
 .search-section {
@@ -95,6 +98,7 @@ body {
 
 .search-button {
     margin-left: 10px;
+    background: #b9bddf;
 }
 
 .profile-section {
@@ -105,20 +109,21 @@ body {
 .profile-icon {
     width: 60px;
     height: 60px;
-    background-color: gray;
+    background-color: rgb(212, 203, 203);
     border-radius: 50%;
     margin-right: 10px;
 }
 
 .uuser {
     font-size: 30px;
-    margin-left: 15px;
+    margin-left: 16px;
     margin-top: 10px;
 }
 
 .profile-header {
     font-weight: bold;
     font-size: 25px;
+    background: #b9bddf;
 }
 .profile-header:hover {
     transform: scale(1.1);
@@ -137,6 +142,7 @@ body {
 .menu-list li button {
     text-decoration: none;
     color: #333;
+    background: #b9bddf;
     font-size: 20px;
 }
 
