@@ -203,7 +203,12 @@ paths:
       summary: gets a photo from its path
       description: enables us to get photos of users
       responses:
-        "200": { description: photo retrieved }
+        "200": 
+          description: photo retrieved 
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RawPhoto'
         "401": { description: operation unauthorized }
         "404": { description: photo not found }
         "500": { description: an error occured please try again later }
