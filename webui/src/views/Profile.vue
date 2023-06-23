@@ -56,6 +56,7 @@ export default {
         try {
           if(this.banState) {
             await this.$axios.delete("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
+            this.loadInfo()
           } else {
             await this.$axios.put("/users/"+localStorage.getItem('token')+"/ban/"+this.$route.params.id);
             if(this.followState) {
@@ -144,13 +145,13 @@ export default {
           <h2 class="element">Posts: {{nPosts}}</h2>
           <h3 class="element">Followers: {{nFollowers}}</h3>
           <h4 class="element">Followings: {{nFollowings}}</h4>
-          <button v-if="!cUser && !banState" @click="follow" class="element">
+          <button v-if="!cUser && !banState" @click="follow" class="element cbtn fbtn">
               {{followState ? "Unfollow" : "Follow"}}
           </button>
-          <button v-if="!cUser" @click="ban" class="element">
+          <button v-if="!cUser" @click="ban" class="element cbtn bbtn">
               {{banState ? "Unban" : "Ban" }}
           </button>
-          <button v-else data-bs-toggle="modal" :data-bs-target="'#usernameMod'" class="element">
+          <button v-else data-bs-toggle="modal" :data-bs-target="'#usernameMod'" class="element lastof">
               <i class="edit-icon fas fa-pen-square"></i> 
           </button>
         </div>
@@ -200,6 +201,13 @@ export default {
   margin-bottom: 15px;
   margin-top: 10px;
 }
+.exit {
+  border: none;
+  background: transparent;
+}
+.exit:hover {
+  transform: scale(1.5);
+}
 .exit-icon {
   color: black;
   margin-bottom: 15px;
@@ -214,8 +222,32 @@ export default {
   margin-bottom: 10px;
   margin-top: 10px;
 }
+.cbtn {
+  border: none;
+  color: white;
+}
+.cbtn:hover {
+  transform: scale(1.1)
+}
+.fbtn {
+  background: #3f729b;
+}
+.bbtn {
+  background: #C01111;
+}
+.edit-icon {
+  color: rgb(34, 34, 154);
+  font-size: 25px;
+}
 .element:last-child {
   margin-right: 10px;
+}
+.lastof {
+  border: none;
+  background: transparent;
+}
+.lastof:hover {
+  transform: scale(1.2);
 }
 .post-title {
   text-align: start;

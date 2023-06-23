@@ -35,10 +35,12 @@ export default {
 }
 
 .user-card {
-    background-color: transparent;
+    background-color: #3f729b;
+    color: white;
     border-style: solid;
     border-width: 1px;
     border-color: #000;
+    padding: 10px;
 }
 
 .user-card-title {

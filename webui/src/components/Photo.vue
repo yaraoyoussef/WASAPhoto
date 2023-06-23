@@ -119,12 +119,16 @@ export default {
   border-color: transparent;
   font-size: 20px;
 }
+.delete-photo {
+  background: transparent;
+  border: none;
+}
 .delete-photo:hover {
   color: red;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 .delete-icon {
-  font-size: 15px;
+  font-size: 20px;
 }
 .picture-space {
   height: 350px;
@@ -140,14 +144,27 @@ export default {
 .photo-bottom {
   display: flex;
 }
+.like-btn {
+  background: transparent;
+  border: none;
+}
+.like-btn:hover {
+  transform: scale(1.1)
+}
 .like {
-  font-size: 20px;
+  font-size: 25px;
+  color: rgb(193, 65, 65);
 }
 .comment-btn {
   margin-left: 10px;
+  background: transparent;
+  border: none;
+}
+.comment-btn:hover {
+  transform: scale(1.1)
 }
 .comment {
-  font-size: 20px;
+  font-size: 25px;
 }
 .upload-info {
   margin-left: 90px;
