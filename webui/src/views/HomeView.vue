@@ -35,11 +35,23 @@ export default {
 					}) 
 				}
 
+				if(file) {
+					showPopupMessage();
+				}
+
 				input.value = null;
 
 			} catch(e) {
 				this.errormsg = e.toString()
 			}
+		},
+
+		showPopupMessage() {
+			var popup = document.getElementById('popupMessage');
+			popup.style.display= "block";
+			setTimeout(function() {
+				popup.style.display = "none";}, 3000);
+
 		}
 	},
 	mounted() {
@@ -54,6 +66,9 @@ export default {
 			<div class="add-post-section">
 				<input type="file" id="photo-input" class="photo-input" accept=".png, .jpeg">
 				<button @click="upload" class="uploader">Upload</button>
+			</div>
+			<div id="popupMessage" class="popup">
+				Photo uploaded successfully!
 			</div>
 			<div class="photo-wrapper">
 				<div class="photo-container">
@@ -93,6 +108,16 @@ export default {
 }
 .photo-input {
 	font-size: 17px;
+}
+.popup {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #ffffff;
+	padding: 20px;
+	border: 1px solid #cccccc;
 }
 .photo-wrapper {
 	display: flex;
