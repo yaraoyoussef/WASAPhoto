@@ -207,8 +207,7 @@ paths:
           description: photo retrieved 
           content: 
             application/json:
-              schema:
-                $ref: '#/components/schemas/RawPhoto'
+              schema: { $ref: '#/components/schemas/RawPhoto' }
         "401": { description: operation unauthorized }
         "404": { description: photo not found }
         "500": { description: an error occured please try again later }
@@ -315,8 +314,7 @@ paths:
           description: users matching the searched username are fetched
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/UsersList"
+              schema: { $ref: "#/components/schemas/UsersList" }
         "401": { description: operation not authorised }
         "404": { description: not found }
         "500":
@@ -404,21 +402,18 @@ components:
           description: id of a photo
           type: number
           example: 10097
-        owner:
-          $ref: "#/components/schemas/UserId"
+        owner: { $ref: "#/components/schemas/UserId" }
         likes:
           description: represents the lits of likes on a given photo
           type: array
-          items:
-            $ref: "#/components/schemas/UserId"
+          items: { $ref: "#/components/schemas/UserId" }
           minItems: 0
           maxItems: 100000000000
           example: [maria77, bob77]
         comments: 
           description: represents the list of comments on a given photo
           type: array 
-          items: 
-            $ref: "#/components/schemas/Comment"
+          items: { $ref: "#/components/schemas/Comment" }
           minItems: 0
           maxItems: 100000000000
         dateAndTime:
@@ -465,8 +460,7 @@ components:
           type: array
           minItems: 0
           maxItems: 20
-          items:
-            $ref: "#/components/schemas/UserId"
+          items: { $ref: "#/components/schemas/UserId" }
           example: 
             - ID: maria77
             - ID: mario78
