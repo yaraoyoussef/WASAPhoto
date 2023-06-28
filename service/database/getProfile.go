@@ -54,7 +54,7 @@ func (db *appdbimpl) GetFollowing(user string) ([]User, error) {
 		following = append(following, user)
 	}
 
-	if rows.Err() != nil {
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 	return following, nil
@@ -82,7 +82,7 @@ func (db *appdbimpl) GetFollowers(user string) ([]User, error) {
 		followers = append(followers, user)
 	}
 
-	if rows.Err() != nil {
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 	return followers, nil
@@ -122,7 +122,7 @@ func (db *appdbimpl) GetPhotos(reqUser string, user string) ([]Photo, error) {
 		photos = append(photos, photo)
 	}
 
-	if rows.Err() != nil {
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 	return photos, nil
@@ -154,7 +154,7 @@ func (db *appdbimpl) GetComments(reqUser string, user string, photo int64) ([]Co
 		comments = append(comments, comment)
 	}
 
-	if rows.Err() != nil {
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 	return comments, nil
@@ -185,7 +185,7 @@ func (db *appdbimpl) GetLikes(reqUser string, user string, photo int64) ([]User,
 		likes = append(likes, user)
 	}
 
-	if rows.Err() != nil {
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 	return likes, nil
