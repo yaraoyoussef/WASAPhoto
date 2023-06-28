@@ -482,17 +482,6 @@ components:
       in: path
       required: true
       description: id of the authorised user
-    Username:
-      schema:
-        type: string
-        pattern: '^([a-z0-9._-])\w+$'
-        minLength: 5
-        maxLength: 15
-        example: maria77
-      name: username
-      in: path
-      required: true
-      description: username of the authorised user
     OtherUserId:
       schema:
         type: string
