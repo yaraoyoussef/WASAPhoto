@@ -3,10 +3,10 @@ This repository contains the WASAPhoto project, developed as part of the Web and
 
 ## Project Overview
 WASAPhoto was developed with the following key technologies:
-Backend: Go (Golang)
-Frontend: JavaScript
-API Definition: OpenAPI standard
-Deployment: Docker container
+- Backend: Go (Golang)
+- Frontend: JavaScript
+- API Definition: OpenAPI standard
+- Deployment: Docker container
 
 ## Key Features
 Photo Stream: Users see a stream of photos from people they follow, ordered by the most recent uploads. Each photo displays the upload date, time, likes, and comments.
